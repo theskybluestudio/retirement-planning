@@ -70,13 +70,11 @@ def render_page() -> None:
         st.markdown(
             "- **Core planners** — readiness, Social Security, RMD strategy, IRMAA, sequence risk\n"
             "- **Income & withdrawals** — guardrails, withdrawal order, spending phases, savings catch-up\n"
-            "- **Shared assumptions** — common facts entered once\n"
-            "- **Reference** — product roadmap"
+            "- **Shared assumptions** — common facts entered once"
         )
     else:
         st.markdown(
             "- **核心规划** — 退休准备度、社保、RMD 策略、IRMAA、收益顺序风险\n"
             "- **收入与提款** — 护栏提款、提款顺序、阶段支出、追赶储蓄\n"
-            "- **共享假设** — 一次输入通用信息\n"
-            "- **参考** — 产品路线图"
+            "- **共享假设** — 一次输入通用信息"
         )

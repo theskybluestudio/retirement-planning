@@ -88,7 +88,7 @@ CATALOG: dict[str, Any] = {
         "step_1": {"en": "1. Pick a page from Streamlit’s sidebar.", "zh": "1. 在 Streamlit 侧边栏中选择页面。"},
         "step_2": {"en": "2. Start with Shared Assumptions and set the common facts once.", "zh": "2. 从“共享假设”开始，一次性设置通用信息。"},
         "step_3": {"en": "3. Open a calculator page and adjust only page-specific inputs.", "zh": "3. 打开具体计算页面，只调整该页面特有的输入。"},
-        "step_4": {"en": "4. Use the Roadmap page to see what’s next.", "zh": "4. 使用路线图页面查看后续计划。"},
+        "step_4": {"en": "4. Move between calculators without re-entering the shared facts.", "zh": "4. 在多个计算页面之间切换时，无需重新输入共享信息。"},
         "note": {
             "en": "The app now uses Streamlit’s native multipage structure plus session state, so shared facts persist while each page stays focused on its own question.",
             "zh": "应用现在使用 Streamlit 原生多页面结构和 session state，因此共享信息会保留，而每个页面仍聚焦自己的问题。",

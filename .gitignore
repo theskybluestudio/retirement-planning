@@ -46,3 +46,10 @@ htmlcov/
 # Local helper scripts
 runapp.bat
 runapp-local.bat
+
+# Local archive / legacy work
+application/_legacy/
+
+# Local planning reference docs
+ROADMAP.md
+ROADMAP.zh.md

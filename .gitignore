@@ -45,3 +45,4 @@ htmlcov/
 
 # Local helper scripts
 runapp.bat
+runapp-local.bat

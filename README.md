@@ -60,6 +60,7 @@ Then open the local Streamlit URL shown in the terminal.
 
 - Main entrypoint: `application/app.py`
 - Common assumptions are shared across pages through session state
+- Each calculator page now includes a foldable plain-language explainer
 - `runapp.bat` is intentionally excluded from version control as a local helper
 - `requirements.lock.txt` is kept alongside `requirements.txt`
 

@@ -6,7 +6,7 @@ import streamlit as st
 
 from app_i18n import section
 from app_state import get_total_portfolio
-from app_ui import format_currency, render_header, render_note
+from app_ui import format_currency, render_explainer, render_header, render_note
 
 
 
@@ -31,8 +31,10 @@ def simulate_path(start_balance: float, annual_withdrawal: float, returns: list[
 
 def render_page() -> None:
     zh = st.session_state.get("language", "en") == "zh"
+    common = section("common")
     labels = section("sequence")
     render_header(labels["title"], labels["subtitle"])
+    render_explainer(common["about_tool"], labels["about_body"])
 
     start_balance = get_total_portfolio()
     annual_withdrawal = float(st.session_state.annual_retirement_spending)

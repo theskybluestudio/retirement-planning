@@ -15,7 +15,7 @@ from app_state import (
     reset_assumptions,
     validate_assumptions,
 )
-from app_ui import format_currency, render_header, render_note
+from app_ui import format_currency, render_explainer, render_header, render_note
 
 
 
@@ -26,6 +26,7 @@ def render_page() -> None:
         labels["title"],
         labels["subtitle"],
     )
+    render_explainer(section("common")["about_tool"], labels["about_body"])
 
     st.subheader(labels["scenario_presets"])
     preset_cols = st.columns(len(SCENARIO_PRESETS))

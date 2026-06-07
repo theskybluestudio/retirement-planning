@@ -6,7 +6,7 @@ import streamlit as st
 
 from app_i18n import section
 from app_state import get_total_portfolio
-from app_ui import format_currency, render_header, render_note
+from app_ui import format_currency, render_explainer, render_header, render_note
 
 
 RETURNS = [-0.15, -0.08, 0.18, 0.12, 0.07, 0.11, -0.04, 0.09, 0.06, 0.08, 0.05, 0.07, -0.10, 0.14, 0.09]
@@ -48,6 +48,7 @@ def render_page() -> None:
     common = section("common")
     labels = section("safe_withdrawal")
     render_header(labels["title"], labels["subtitle"])
+    render_explainer(common["about_tool"], labels["about_body"])
 
     with st.sidebar:
         st.header(common["page_specific_inputs"])

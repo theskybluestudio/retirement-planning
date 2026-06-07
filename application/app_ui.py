@@ -85,5 +85,11 @@ def render_note(text: str) -> None:
 
 
 
+def render_explainer(label: str, body: str, *, expanded: bool = False) -> None:
+    with st.expander(label, expanded=expanded):
+        st.markdown(body)
+
+
+
 def format_currency(value: float) -> str:
     return f"${value:,.0f}"

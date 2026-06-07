@@ -55,7 +55,7 @@ def render_sidebar_navigation(nav_items: list[tuple[str, st.Page]]) -> None:
 
 
 def main() -> None:
-    setup_page("Retirement Planning Suite")
+    setup_page("Retirement Planning, Demystified")
     nav_items = build_navigation()
     navigation = st.navigation([page for _, page in nav_items], position="hidden")
     render_sidebar_navigation(nav_items)

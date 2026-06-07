@@ -4,7 +4,7 @@ from __future__ import annotations
 import streamlit as st
 
 from app_i18n import section
-from app_ui import format_currency, render_header, render_note
+from app_ui import format_currency, render_explainer, render_header, render_note
 
 
 
@@ -31,6 +31,7 @@ def render_page() -> None:
     common = section("common")
     labels = section("savings_rate")
     render_header(labels["title"], labels["subtitle"])
+    render_explainer(common["about_tool"], labels["about_body"])
 
     with st.sidebar:
         st.header(common["page_specific_inputs"])

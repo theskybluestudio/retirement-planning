@@ -147,7 +147,7 @@ CATALOG: dict[str, Any] = {
         "caption": {"en": "This MVP uses simplified claiming factors and ignores taxation, COLA details, spousal benefits, and discount rates.", "zh": "这个 MVP 使用了简化的领取系数，未纳入税务、COLA、配偶收益和贴现率。"},
     },
     "irmaa": {
-        "title": {"en": "Medicare IRMAA", "zh": "Medicare IRMAA"},
+        "title": {"en": "Medicare IRMAA", "zh": "Medicare IRMAA 附加费"},
         "subtitle": {"en": "Check how much MAGI headroom remains before a higher Medicare premium tier kicks in.", "zh": "查看在更高 Medicare 保费档位触发前，还剩多少 MAGI 空间。"},
         "extra_income": {"en": "Extra income event", "zh": "额外收入事件"},
         "total_magi": {"en": "Total MAGI", "zh": "总 MAGI"},

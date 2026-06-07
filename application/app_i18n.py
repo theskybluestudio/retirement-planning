@@ -308,7 +308,7 @@ def _resolve_node(path: str) -> dict[str, str] | None:
 
 def init_i18n() -> None:
     if "language" not in st.session_state:
-        st.session_state.language = "en"
+        st.session_state.language = "zh"
 
 
 

@@ -6,7 +6,7 @@ import streamlit as st
 
 from app_i18n import section
 from app_state import commit_shared_widget, prime_shared_widget, shared_widget_key
-from app_ui import format_currency, render_explainer, render_header, render_note
+from app_ui import format_currency, format_dataframe, format_percent, money_input, percent_input, render_explainer, render_header, render_note
 from roth_conversion_engine import PlanInputs, compare_strategies, result_rows
 
 
@@ -34,19 +34,19 @@ def render_page() -> None:
             st.number_input(assumptions["retirement_age"], min_value=25, max_value=80, key=shared_widget_key("retirement_age"), on_change=commit_shared_widget, args=("retirement_age",))
             st.number_input(assumptions["life_expectancy"], min_value=70, max_value=105, key=shared_widget_key("life_expectancy"), on_change=commit_shared_widget, args=("life_expectancy",))
         with c2:
-            st.number_input(assumptions["traditional_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("traditional_balance"), on_change=commit_shared_widget, args=("traditional_balance",))
-            st.number_input(assumptions["roth_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("roth_balance"), on_change=commit_shared_widget, args=("roth_balance",))
-            st.number_input(assumptions["taxable_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("taxable_balance"), on_change=commit_shared_widget, args=("taxable_balance",))
+            money_input(assumptions["traditional_balance"], min_value=0.0, key=shared_widget_key("traditional_balance"), on_change=commit_shared_widget, args=("traditional_balance",))
+            money_input(assumptions["roth_balance"], min_value=0.0, key=shared_widget_key("roth_balance"), on_change=commit_shared_widget, args=("roth_balance",))
+            money_input(assumptions["taxable_balance"], min_value=0.0, key=shared_widget_key("taxable_balance"), on_change=commit_shared_widget, args=("taxable_balance",))
             st.checkbox(assumptions["has_roth_ira"], key=shared_widget_key("has_roth_ira"), on_change=commit_shared_widget, args=("has_roth_ira",))
             st.checkbox(assumptions["has_taxable_brokerage"], key=shared_widget_key("has_taxable_brokerage"), on_change=commit_shared_widget, args=("has_taxable_brokerage",))
         with c3:
-            st.number_input(assumptions["annual_contribution"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_contribution"), on_change=commit_shared_widget, args=("annual_contribution",))
-            st.number_input(assumptions["annual_retirement_spending"], min_value=0.0, step=5_000.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",))
-            st.number_input(assumptions["annual_ss_benefit"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_social_security_benefit"), on_change=commit_shared_widget, args=("annual_social_security_benefit",))
-            st.number_input(assumptions["annual_pension_income"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_pension_income"), on_change=commit_shared_widget, args=("annual_pension_income",))
-            st.number_input(assumptions["annual_other_income"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_other_income"), on_change=commit_shared_widget, args=("annual_other_income",))
-            st.number_input(assumptions["annual_return"], min_value=0.0, max_value=0.20, step=0.005, format="%.3f", key=shared_widget_key("annual_return"), on_change=commit_shared_widget, args=("annual_return",))
-            st.number_input(assumptions["state_tax_rate"], min_value=0.0, max_value=0.20, step=0.005, format="%.3f", key=shared_widget_key("state_tax_rate"), on_change=commit_shared_widget, args=("state_tax_rate",))
+            money_input(assumptions["annual_contribution"], min_value=0.0, key=shared_widget_key("annual_contribution"), on_change=commit_shared_widget, args=("annual_contribution",))
+            money_input(assumptions["annual_retirement_spending"], min_value=0.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",))
+            money_input(assumptions["annual_ss_benefit"], min_value=0.0, key=shared_widget_key("annual_social_security_benefit"), on_change=commit_shared_widget, args=("annual_social_security_benefit",))
+            money_input(assumptions["annual_pension_income"], min_value=0.0, key=shared_widget_key("annual_pension_income"), on_change=commit_shared_widget, args=("annual_pension_income",))
+            money_input(assumptions["annual_other_income"], min_value=0.0, key=shared_widget_key("annual_other_income"), on_change=commit_shared_widget, args=("annual_other_income",))
+            percent_input(assumptions["annual_return"], min_value=0.0, max_value=0.20, key=shared_widget_key("annual_return"), on_change=commit_shared_widget, args=("annual_return",))
+            percent_input(assumptions["state_tax_rate"], min_value=0.0, max_value=0.20, key=shared_widget_key("state_tax_rate"), on_change=commit_shared_widget, args=("state_tax_rate",))
             st.selectbox(assumptions["filing_status"], options=["mfj", "single"], key=shared_widget_key("filing_status"), on_change=commit_shared_widget, args=("filing_status",))
             st.number_input(assumptions["ss_claim_age"], min_value=62, max_value=75, key=shared_widget_key("social_security_claim_age"), on_change=commit_shared_widget, args=("social_security_claim_age",))
 
@@ -115,9 +115,9 @@ def render_page() -> None:
         else f"在这个情景中，转换路径让 75 岁的 RMD 变化了 {format_currency(base.estimated_rmd_at_75 - conv.estimated_rmd_at_75)}，并让模型估算的终身总成本变化了 {format_currency(savings)}。"
     )
     st.caption(
-        f"Using shared assumptions: age {current_age}, retire at {retirement_age}, {format_currency(current_401k_balance)} traditional, {format_currency(current_roth_balance)} Roth, {format_currency(current_taxable_balance)} taxable, and {annual_return:.1%} annual return."
+        f"Using shared assumptions: age {current_age}, retire at {retirement_age}, {format_currency(current_401k_balance)} traditional, {format_currency(current_roth_balance)} Roth, {format_currency(current_taxable_balance)} taxable, and {format_percent(annual_return)} annual return."
         if not zh
-        else f"使用共享假设：当前年龄 {current_age}，退休年龄 {retirement_age}，traditional {format_currency(current_401k_balance)}，Roth {format_currency(current_roth_balance)}，taxable {format_currency(current_taxable_balance)}，年化收益率 {annual_return:.1%}。"
+        else f"使用共享假设：当前年龄 {current_age}，退休年龄 {retirement_age}，traditional {format_currency(current_401k_balance)}，Roth {format_currency(current_roth_balance)}，taxable {format_currency(current_taxable_balance)}，年化收益率 {format_percent(annual_return)}。"
     )
 
     summary = pd.DataFrame(
@@ -154,7 +154,7 @@ def render_page() -> None:
 
     with overview_tab:
         st.subheader(labels["strategy_comparison"])
-        st.dataframe(summary, use_container_width=True)
+        st.dataframe(format_dataframe(summary, currency_columns=["traditional_at_75", "roth_at_75", "taxable_at_75", "rmd_at_75", "federal_tax_total", "state_tax_total", "aca_drag_total", "irmaa_total", "total_cost"]), use_container_width=True)
         compare_rmd = pd.DataFrame(
             {
                 "scenario": ["conversion", "no_conversion"],
@@ -171,17 +171,35 @@ def render_page() -> None:
 
     with detail_tab:
         st.subheader(labels["annual_path"])
+        detail_df = conv_df[
+            [
+                "age",
+                "start_traditional",
+                "start_taxable",
+                "start_roth",
+                "spending_need",
+                "recommended_conversion",
+                "gross_income",
+                "effective_marginal_bracket",
+                "estimated_federal_tax",
+                "estimated_state_tax",
+                "aca_subsidy_loss",
+                "irmaa_surcharge",
+                "end_traditional",
+                "end_roth",
+                "end_taxable",
+            ]
+        ]
         st.dataframe(
-            conv_df[
-                [
-                    "age",
+            format_dataframe(
+                detail_df,
+                currency_columns=[
                     "start_traditional",
                     "start_taxable",
                     "start_roth",
                     "spending_need",
                     "recommended_conversion",
                     "gross_income",
-                    "effective_marginal_bracket",
                     "estimated_federal_tax",
                     "estimated_state_tax",
                     "aca_subsidy_loss",
@@ -189,8 +207,8 @@ def render_page() -> None:
                     "end_traditional",
                     "end_roth",
                     "end_taxable",
-                ]
-            ],
+                ],
+            ),
             use_container_width=True,
         )
 

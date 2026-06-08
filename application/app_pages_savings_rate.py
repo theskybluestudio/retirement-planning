@@ -5,7 +5,7 @@ import streamlit as st
 
 from app_i18n import section
 from app_state import commit_shared_widget, prime_shared_widget, shared_widget_key
-from app_ui import format_currency, render_explainer, render_header, render_note
+from app_ui import format_currency, format_percent, money_input, percent_input, render_explainer, render_header, render_note
 
 
 
@@ -44,17 +44,17 @@ def render_page() -> None:
             st.number_input(assumptions["current_age"], min_value=18, max_value=80, key=shared_widget_key("current_age"), on_change=commit_shared_widget, args=("current_age",))
             st.number_input(assumptions["retirement_age"], min_value=25, max_value=80, key=shared_widget_key("retirement_age"), on_change=commit_shared_widget, args=("retirement_age",))
         with c2:
-            st.number_input(assumptions["traditional_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("traditional_balance"), on_change=commit_shared_widget, args=("traditional_balance",))
-            st.number_input(assumptions["roth_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("roth_balance"), on_change=commit_shared_widget, args=("roth_balance",))
-            st.number_input(assumptions["taxable_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("taxable_balance"), on_change=commit_shared_widget, args=("taxable_balance",))
+            money_input(assumptions["traditional_balance"], min_value=0.0, key=shared_widget_key("traditional_balance"), on_change=commit_shared_widget, args=("traditional_balance",))
+            money_input(assumptions["roth_balance"], min_value=0.0, key=shared_widget_key("roth_balance"), on_change=commit_shared_widget, args=("roth_balance",))
+            money_input(assumptions["taxable_balance"], min_value=0.0, key=shared_widget_key("taxable_balance"), on_change=commit_shared_widget, args=("taxable_balance",))
         with c3:
-            st.number_input(assumptions["annual_contribution"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_contribution"), on_change=commit_shared_widget, args=("annual_contribution",))
-            st.number_input(assumptions["annual_return"], min_value=0.0, max_value=0.20, step=0.005, format="%.3f", key=shared_widget_key("annual_return"), on_change=commit_shared_widget, args=("annual_return",))
+            money_input(assumptions["annual_contribution"], min_value=0.0, key=shared_widget_key("annual_contribution"), on_change=commit_shared_widget, args=("annual_contribution",))
+            percent_input(assumptions["annual_return"], min_value=0.0, max_value=0.20, key=shared_widget_key("annual_return"), on_change=commit_shared_widget, args=("annual_return",))
 
     with st.sidebar:
         st.divider()
         st.header(common["page_specific_inputs"])
-        target_portfolio = st.number_input(labels["target_portfolio"], min_value=0.0, step=50_000.0, key="save_target_portfolio")
+        target_portfolio = money_input(labels["target_portfolio"], min_value=0.0, key="save_target_portfolio")
 
     current_age = int(st.session_state.current_age)
     retirement_age = int(st.session_state.retirement_age)
@@ -80,9 +80,9 @@ def render_page() -> None:
         else f"若想在 {retirement_age} 岁前达到 {format_currency(target_portfolio)} 的目标资产，这个模型估算每年大约需要储蓄 {format_currency(needed)}。"
     )
     st.caption(
-        f"Using shared assumptions: age {current_age}, retire at {retirement_age}, current portfolio {format_currency(current_savings)}, annual savings {format_currency(current_annual_savings)}, return {annual_return:.1%}."
+        f"Using shared assumptions: age {current_age}, retire at {retirement_age}, current portfolio {format_currency(current_savings)}, annual savings {format_currency(current_annual_savings)}, return {format_percent(annual_return)}."
         if not zh
-        else f"使用共享假设：当前年龄 {current_age}，退休年龄 {retirement_age}，当前资产 {format_currency(current_savings)}，年度储蓄 {format_currency(current_annual_savings)}，收益率 {annual_return:.1%}。"
+        else f"使用共享假设：当前年龄 {current_age}，退休年龄 {retirement_age}，当前资产 {format_currency(current_savings)}，年度储蓄 {format_currency(current_annual_savings)}，收益率 {format_percent(annual_return)}。"
     )
 
     if gap <= 0:

@@ -6,7 +6,7 @@ import streamlit as st
 
 from app_i18n import section
 from app_state import commit_shared_widget, prime_shared_widget, shared_widget_key
-from app_ui import format_currency, render_explainer, render_header, render_note
+from app_ui import format_currency, format_dataframe, money_input, render_explainer, render_header, render_note
 
 
 CLAIMING_FACTORS = {
@@ -33,7 +33,7 @@ def render_page() -> None:
     prime_shared_widget("social_security_fra_benefit")
 
     with st.expander(common["shared_inputs"], expanded=False):
-        st.number_input(labels["annual_ss_benefit_fra"], min_value=0.0, step=1_000.0, key=shared_widget_key("social_security_fra_benefit"), on_change=commit_shared_widget, args=("social_security_fra_benefit",))
+        money_input(labels["annual_ss_benefit_fra"], min_value=0.0, key=shared_widget_key("social_security_fra_benefit"), on_change=commit_shared_widget, args=("social_security_fra_benefit",))
 
     with st.sidebar:
         st.divider()
@@ -96,5 +96,5 @@ def render_page() -> None:
         st.write(f"Years collected: **{int(selected_row['years_collected'])}**" if not zh else f"领取年数：**{int(selected_row['years_collected'])}**")
 
     st.subheader(labels["comparison"])
-    st.dataframe(df, use_container_width=True)
+    st.dataframe(format_dataframe(df, currency_columns=["annual_benefit", "lifetime_benefit"], integer_columns=["claim_age", "years_collected"]), use_container_width=True)
     st.caption(labels["caption"])

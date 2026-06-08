@@ -6,7 +6,7 @@ import streamlit as st
 
 from app_i18n import section
 from app_state import commit_shared_widget, prime_shared_widget, shared_widget_key
-from app_ui import format_currency, render_explainer, render_header, render_note
+from app_ui import format_currency, format_dataframe, money_input, render_explainer, render_header, render_note
 
 
 
@@ -26,7 +26,7 @@ def render_page() -> None:
         with c1:
             st.number_input(assumptions["retirement_age"], min_value=25, max_value=80, key=shared_widget_key("retirement_age"), on_change=commit_shared_widget, args=("retirement_age",))
         with c2:
-            st.number_input(assumptions["annual_retirement_spending"], min_value=0.0, step=5_000.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",))
+            money_input(assumptions["annual_retirement_spending"], min_value=0.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",))
 
     with st.sidebar:
         st.divider()
@@ -37,7 +37,7 @@ def render_page() -> None:
         slow_go_multiplier = st.number_input(labels["slow_go_multiplier"], min_value=0.5, max_value=2.0, value=0.95, step=0.05, key="smile_slow_go_multiplier")
         no_go_years = st.number_input(labels["no_go_years"], min_value=1, max_value=20, value=10, key="smile_no_go_years")
         no_go_multiplier = st.number_input(labels["no_go_multiplier"], min_value=0.5, max_value=2.0, value=0.80, step=0.05, key="smile_no_go_multiplier")
-        healthcare_step_up = st.number_input(labels["healthcare_step_up"], min_value=0.0, value=15_000.0, step=1_000.0, key="smile_healthcare_step_up")
+        healthcare_step_up = money_input(labels["healthcare_step_up"], min_value=0.0, value=15_000.0, key="smile_healthcare_step_up")
 
     retirement_age = int(st.session_state.retirement_age)
     base_spending = float(st.session_state.annual_retirement_spending)
@@ -91,5 +91,5 @@ def render_page() -> None:
         st.bar_chart(phase_summary)
 
     st.subheader(labels["detailed_schedule"])
-    st.dataframe(df, use_container_width=True)
+    st.dataframe(format_dataframe(df, currency_columns=["annual_spending"]), use_container_width=True)
     st.caption(labels["caption"])

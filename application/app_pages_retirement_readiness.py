@@ -6,7 +6,7 @@ import streamlit as st
 
 from app_i18n import section
 from app_state import commit_shared_widget, get_total_portfolio, prime_shared_widget, shared_widget_key
-from app_ui import format_currency, render_explainer, render_header, render_note
+from app_ui import format_currency, format_dataframe, format_percent, money_input, percent_input, render_explainer, render_header, render_note
 
 
 
@@ -31,21 +31,21 @@ def render_page() -> None:
             st.number_input(assumptions["current_age"], min_value=18, max_value=80, key=shared_widget_key("current_age"), on_change=commit_shared_widget, args=("current_age",))
             st.number_input(assumptions["retirement_age"], min_value=25, max_value=80, key=shared_widget_key("retirement_age"), on_change=commit_shared_widget, args=("retirement_age",))
         with c2:
-            st.number_input(assumptions["traditional_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("traditional_balance"), on_change=commit_shared_widget, args=("traditional_balance",))
-            st.number_input(assumptions["roth_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("roth_balance"), on_change=commit_shared_widget, args=("roth_balance",))
-            st.number_input(assumptions["taxable_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("taxable_balance"), on_change=commit_shared_widget, args=("taxable_balance",))
+            money_input(assumptions["traditional_balance"], min_value=0.0, key=shared_widget_key("traditional_balance"), on_change=commit_shared_widget, args=("traditional_balance",))
+            money_input(assumptions["roth_balance"], min_value=0.0, key=shared_widget_key("roth_balance"), on_change=commit_shared_widget, args=("roth_balance",))
+            money_input(assumptions["taxable_balance"], min_value=0.0, key=shared_widget_key("taxable_balance"), on_change=commit_shared_widget, args=("taxable_balance",))
         with c3:
-            st.number_input(assumptions["annual_contribution"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_contribution"), on_change=commit_shared_widget, args=("annual_contribution",))
-            st.number_input(assumptions["annual_return"], min_value=0.0, max_value=0.20, step=0.005, format="%.3f", key=shared_widget_key("annual_return"), on_change=commit_shared_widget, args=("annual_return",))
-            st.number_input(assumptions["inflation"], min_value=0.0, max_value=0.10, step=0.005, format="%.3f", key=shared_widget_key("inflation"), on_change=commit_shared_widget, args=("inflation",))
-            st.number_input(assumptions["annual_retirement_spending"], min_value=0.0, step=5_000.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",))
-            st.number_input(assumptions["annual_ss_benefit"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_social_security_benefit"), on_change=commit_shared_widget, args=("annual_social_security_benefit",))
-            st.number_input(assumptions["annual_pension_income"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_pension_income"), on_change=commit_shared_widget, args=("annual_pension_income",))
+            money_input(assumptions["annual_contribution"], min_value=0.0, key=shared_widget_key("annual_contribution"), on_change=commit_shared_widget, args=("annual_contribution",))
+            percent_input(assumptions["annual_return"], min_value=0.0, max_value=0.20, key=shared_widget_key("annual_return"), on_change=commit_shared_widget, args=("annual_return",))
+            percent_input(assumptions["inflation"], min_value=0.0, max_value=0.10, key=shared_widget_key("inflation"), on_change=commit_shared_widget, args=("inflation",))
+            money_input(assumptions["annual_retirement_spending"], min_value=0.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",))
+            money_input(assumptions["annual_ss_benefit"], min_value=0.0, key=shared_widget_key("annual_social_security_benefit"), on_change=commit_shared_widget, args=("annual_social_security_benefit",))
+            money_input(assumptions["annual_pension_income"], min_value=0.0, key=shared_widget_key("annual_pension_income"), on_change=commit_shared_widget, args=("annual_pension_income",))
 
     with st.sidebar:
         st.divider()
         st.header(common["page_specific_inputs"])
-        withdrawal_rate = st.number_input(labels["withdrawal_rate"], min_value=0.01, max_value=0.10, step=0.005, format="%.3f", key="readiness_withdrawal_rate")
+        withdrawal_rate = percent_input(labels["withdrawal_rate"], min_value=0.01, max_value=0.10, key="readiness_withdrawal_rate")
 
     current_age = int(st.session_state.current_age)
     retirement_age = int(st.session_state.retirement_age)
@@ -79,17 +79,17 @@ def render_page() -> None:
     c1.metric(labels["nest_egg"], format_currency(final_nominal))
     c2.metric(labels["real_nest_egg"], format_currency(final_real))
     c3.metric(labels["total_income"], f"{format_currency(total_income)}/yr")
-    c4.metric(labels["funding_ratio"], f"{replacement_ratio:.0%}")
+    c4.metric(labels["funding_ratio"], format_percent(replacement_ratio))
 
     render_note(
-        f"Portfolio income at a {withdrawal_rate:.1%} withdrawal rate is {format_currency(portfolio_income)} per year. That creates a {'surplus' if gap >= 0 else 'gap'} of {format_currency(abs(gap))} relative to the target spending level."
+        f"Portfolio income at a {format_percent(withdrawal_rate)} withdrawal rate is {format_currency(portfolio_income)} per year. That creates a {'surplus' if gap >= 0 else 'gap'} of {format_currency(abs(gap))} relative to the target spending level."
         if not zh
-        else f"按 {withdrawal_rate:.1%} 的提款率计算，资产收入约为每年 {format_currency(portfolio_income)}。相对于目标支出，这形成了 {format_currency(abs(gap))} 的{'盈余' if gap >= 0 else '缺口'}。"
+        else f"按 {format_percent(withdrawal_rate)} 的提款率计算，资产收入约为每年 {format_currency(portfolio_income)}。相对于目标支出，这形成了 {format_currency(abs(gap))} 的{'盈余' if gap >= 0 else '缺口'}。"
     )
     st.caption(
-        f"Using shared assumptions: total current portfolio {format_currency(current_savings)}, annual contribution {format_currency(annual_contribution)}, annual return {annual_return:.1%}, inflation {inflation:.1%}."
+        f"Using shared assumptions: total current portfolio {format_currency(current_savings)}, annual contribution {format_currency(annual_contribution)}, annual return {format_percent(annual_return)}, inflation {format_percent(inflation)}."
         if not zh
-        else f"使用共享假设：当前总资产 {format_currency(current_savings)}，年度投入 {format_currency(annual_contribution)}，年化收益率 {annual_return:.1%}，通胀率 {inflation:.1%}。"
+        else f"使用共享假设：当前总资产 {format_currency(current_savings)}，年度投入 {format_currency(annual_contribution)}，年化收益率 {format_percent(annual_return)}，通胀率 {format_percent(inflation)}。"
     )
 
     projection_df = pd.DataFrame(rows).set_index("age")
@@ -117,5 +117,5 @@ def render_page() -> None:
             st.write(f"Fixed income sources contribute **{format_currency(fixed_income)}** per year.")
 
     st.subheader(labels["table"])
-    st.dataframe(projection_df.reset_index(), use_container_width=True)
+    st.dataframe(format_dataframe(projection_df.reset_index(), currency_columns=["nominal_balance", "real_balance"]), use_container_width=True)
     st.caption(labels["caption"])

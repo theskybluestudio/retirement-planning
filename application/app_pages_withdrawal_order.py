@@ -6,7 +6,7 @@ import streamlit as st
 
 from app_i18n import section
 from app_state import commit_shared_widget, prime_shared_widget, shared_widget_key
-from app_ui import format_currency, render_explainer, render_header, render_note
+from app_ui import format_currency, format_dataframe, money_input, render_explainer, render_header, render_note
 
 
 TAX_RATE = 0.22
@@ -61,11 +61,11 @@ def render_page() -> None:
     with st.expander(common["shared_inputs"], expanded=False):
         c1, c2 = st.columns(2)
         with c1:
-            st.number_input(assumptions["taxable_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("taxable_balance"), on_change=commit_shared_widget, args=("taxable_balance",))
-            st.number_input(assumptions["traditional_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("traditional_balance"), on_change=commit_shared_widget, args=("traditional_balance",))
+            money_input(assumptions["taxable_balance"], min_value=0.0, key=shared_widget_key("taxable_balance"), on_change=commit_shared_widget, args=("taxable_balance",))
+            money_input(assumptions["traditional_balance"], min_value=0.0, key=shared_widget_key("traditional_balance"), on_change=commit_shared_widget, args=("traditional_balance",))
         with c2:
-            st.number_input(assumptions["roth_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("roth_balance"), on_change=commit_shared_widget, args=("roth_balance",))
-            st.number_input(assumptions["annual_retirement_spending"], min_value=0.0, step=5_000.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",))
+            money_input(assumptions["roth_balance"], min_value=0.0, key=shared_widget_key("roth_balance"), on_change=commit_shared_widget, args=("roth_balance",))
+            money_input(assumptions["annual_retirement_spending"], min_value=0.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",))
 
     with st.sidebar:
         st.divider()
@@ -102,7 +102,7 @@ def render_page() -> None:
     )
 
     st.subheader(labels["strategy_comparison"])
-    st.dataframe(df, use_container_width=True)
+    st.dataframe(format_dataframe(df, currency_columns=["estimated_tax", "unfunded_need", "ending_taxable", "ending_traditional", "ending_roth"]), use_container_width=True)
 
     tax_chart = df.set_index("strategy")[["estimated_tax"]]
     balance_chart = df.set_index("strategy")[["ending_taxable", "ending_traditional", "ending_roth"]]

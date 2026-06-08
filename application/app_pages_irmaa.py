@@ -6,7 +6,7 @@ import streamlit as st
 
 from app_i18n import section
 from app_state import commit_shared_widget, prime_shared_widget, shared_widget_key
-from app_ui import format_currency, render_explainer, render_header, render_note
+from app_ui import format_currency, format_dataframe, money_input, render_explainer, render_header, render_note
 from roth_conversion_engine import IRMAA_2026
 
 
@@ -26,15 +26,15 @@ def render_page() -> None:
         c1, c2 = st.columns(2)
         with c1:
             st.selectbox(assumptions["filing_status"], options=["mfj", "single"], key=shared_widget_key("filing_status"), on_change=commit_shared_widget, args=("filing_status",))
-            st.number_input(assumptions["annual_other_income"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_other_income"), on_change=commit_shared_widget, args=("annual_other_income",))
+            money_input(assumptions["annual_other_income"], min_value=0.0, key=shared_widget_key("annual_other_income"), on_change=commit_shared_widget, args=("annual_other_income",))
         with c2:
-            st.number_input(assumptions["annual_pension_income"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_pension_income"), on_change=commit_shared_widget, args=("annual_pension_income",))
-            st.number_input(assumptions["annual_ss_benefit"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_social_security_benefit"), on_change=commit_shared_widget, args=("annual_social_security_benefit",))
+            money_input(assumptions["annual_pension_income"], min_value=0.0, key=shared_widget_key("annual_pension_income"), on_change=commit_shared_widget, args=("annual_pension_income",))
+            money_input(assumptions["annual_ss_benefit"], min_value=0.0, key=shared_widget_key("annual_social_security_benefit"), on_change=commit_shared_widget, args=("annual_social_security_benefit",))
 
     with st.sidebar:
         st.divider()
         st.header(common["page_specific_inputs"])
-        extra_income = st.number_input(labels["extra_income"], min_value=0.0, value=25_000.0, step=1_000.0, key="irmaa_extra_income")
+        extra_income = money_input(labels["extra_income"], min_value=0.0, value=25_000.0, key="irmaa_extra_income")
 
     filing_status = str(st.session_state.filing_status)
     base_magi = (
@@ -88,7 +88,7 @@ def render_page() -> None:
     chart_col, detail_col = st.columns([1.2, 1.0])
     with chart_col:
         st.subheader(labels["thresholds"])
-        st.dataframe(table, use_container_width=True)
+        st.dataframe(format_dataframe(table, currency_columns=["magi_threshold", "annual_irmaa_surcharge"]), use_container_width=True)
     with detail_col:
         st.subheader(labels["quick_read"])
         if extra_income > 0:

@@ -6,7 +6,7 @@ import streamlit as st
 
 from app_i18n import section
 from app_state import commit_shared_widget, get_total_portfolio, prime_shared_widget, shared_widget_key
-from app_ui import format_currency, render_explainer, render_header, render_note
+from app_ui import format_currency, format_dataframe, format_percent, money_input, percent_input, render_explainer, render_header, render_note
 
 
 RETURNS = [-0.15, -0.08, 0.18, 0.12, 0.07, 0.11, -0.04, 0.09, 0.06, 0.08, 0.05, 0.07, -0.10, 0.14, 0.09]
@@ -57,17 +57,17 @@ def render_page() -> None:
     with st.expander(common["shared_inputs"], expanded=False):
         c1, c2 = st.columns(2)
         with c1:
-            st.number_input(assumptions["traditional_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("traditional_balance"), on_change=commit_shared_widget, args=("traditional_balance",))
-            st.number_input(assumptions["roth_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("roth_balance"), on_change=commit_shared_widget, args=("roth_balance",))
-            st.number_input(assumptions["taxable_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("taxable_balance"), on_change=commit_shared_widget, args=("taxable_balance",))
+            money_input(assumptions["traditional_balance"], min_value=0.0, key=shared_widget_key("traditional_balance"), on_change=commit_shared_widget, args=("traditional_balance",))
+            money_input(assumptions["roth_balance"], min_value=0.0, key=shared_widget_key("roth_balance"), on_change=commit_shared_widget, args=("roth_balance",))
+            money_input(assumptions["taxable_balance"], min_value=0.0, key=shared_widget_key("taxable_balance"), on_change=commit_shared_widget, args=("taxable_balance",))
         with c2:
-            st.number_input(assumptions["annual_retirement_spending"], min_value=0.0, step=5_000.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",))
+            money_input(assumptions["annual_retirement_spending"], min_value=0.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",))
 
     with st.sidebar:
         st.divider()
         st.header(common["page_specific_inputs"])
-        floor_rate = st.number_input(labels["lower_guardrail"], min_value=0.01, max_value=0.10, step=0.005, format="%.3f", key="guard_floor_rate")
-        ceiling_rate = st.number_input(labels["upper_guardrail"], min_value=0.02, max_value=0.15, step=0.005, format="%.3f", key="guard_ceiling_rate")
+        floor_rate = percent_input(labels["lower_guardrail"], min_value=0.01, max_value=0.10, key="guard_floor_rate")
+        ceiling_rate = percent_input(labels["upper_guardrail"], min_value=0.02, max_value=0.15, key="guard_ceiling_rate")
 
     start_balance = get_total_portfolio()
     initial_withdrawal = float(st.session_state.annual_retirement_spending)
@@ -120,5 +120,5 @@ def render_page() -> None:
 
     detail = fixed_df.merge(guard_df, on="year", suffixes=("_fixed", "_guardrails"))
     st.subheader(labels["scenario_detail"])
-    st.dataframe(detail, use_container_width=True)
+    st.dataframe(format_dataframe(detail, currency_columns=["start_balance_fixed", "withdrawal_fixed", "end_balance_fixed", "start_balance_guardrails", "withdrawal_guardrails", "end_balance_guardrails"]), use_container_width=True)
     st.caption(labels["caption"])

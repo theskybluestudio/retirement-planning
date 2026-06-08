@@ -91,5 +91,109 @@ def render_explainer(label: str, body: str, *, expanded: bool = False) -> None:
 
 
 
+def _money_text_key(key: str) -> str:
+    return f"{key}__money_text"
+
+
+def _parse_money_text(value: str) -> float:
+    cleaned = value.replace("$", "").replace(",", "").strip()
+    if cleaned in {"", ".", "-", "-."}:
+        return 0.0
+    return float(cleaned)
+
+
+def _percent_text_key(key: str) -> str:
+    return f"{key}__percent_text"
+
+
+def _parse_percent_text(value: str) -> float:
+    cleaned = value.replace("%", "").replace(",", "").strip()
+    if cleaned in {"", ".", "-", "-."}:
+        return 0.0
+    return float(cleaned) / 100.0
+
+
+def money_input(
+    label: str,
+    *,
+    key: str,
+    min_value: float = 0.0,
+    value: float | None = None,
+    on_change=None,
+    args: tuple = (),
+) -> float:
+    numeric_value = float(st.session_state.get(key, value if value is not None else min_value))
+    text_key = _money_text_key(key)
+    st.session_state[text_key] = f"{numeric_value:,.0f}"
+
+    def _handle_change() -> None:
+        try:
+            parsed = max(min_value, _parse_money_text(st.session_state[text_key]))
+        except ValueError:
+            parsed = numeric_value
+        st.session_state[key] = float(parsed)
+        st.session_state[text_key] = f"{parsed:,.0f}"
+        if on_change is not None:
+            on_change(*args)
+
+    st.text_input(label, key=text_key, on_change=_handle_change)
+    return float(st.session_state.get(key, numeric_value))
+
+
+def percent_input(
+    label: str,
+    *,
+    key: str,
+    min_value: float = 0.0,
+    max_value: float | None = None,
+    value: float | None = None,
+    on_change=None,
+    args: tuple = (),
+) -> float:
+    numeric_value = float(st.session_state.get(key, value if value is not None else min_value))
+    text_key = _percent_text_key(key)
+    st.session_state[text_key] = f"{numeric_value * 100:,.2f}%"
+
+    def _handle_change() -> None:
+        try:
+            parsed = _parse_percent_text(st.session_state[text_key])
+        except ValueError:
+            parsed = numeric_value
+        parsed = max(min_value, parsed)
+        if max_value is not None:
+            parsed = min(max_value, parsed)
+        st.session_state[key] = float(parsed)
+        st.session_state[text_key] = f"{parsed * 100:,.2f}%"
+        if on_change is not None:
+            on_change(*args)
+
+    st.text_input(label, key=text_key, on_change=_handle_change)
+    return float(st.session_state.get(key, numeric_value))
+
+
+def format_percent(value: float) -> str:
+    return f"{float(value) * 100:.2f}%"
+
+
+def format_dataframe(
+    df,
+    *,
+    currency_columns: list[str] | None = None,
+    percent_columns: list[str] | None = None,
+    integer_columns: list[str] | None = None,
+):
+    formatted = df.copy()
+    for column in currency_columns or []:
+        if column in formatted.columns:
+            formatted[column] = formatted[column].map(format_currency)
+    for column in percent_columns or []:
+        if column in formatted.columns:
+            formatted[column] = formatted[column].map(format_percent)
+    for column in integer_columns or []:
+        if column in formatted.columns:
+            formatted[column] = formatted[column].map(lambda value: f"{int(value):,}")
+    return formatted
+
+
 def format_currency(value: float) -> str:
     return f"${value:,.0f}"

@@ -243,8 +243,8 @@ def marginal_bracket(gross_ordinary_income: float, status: FilingStatus) -> str:
     taxable_income = max(0.0, gross_ordinary_income - deduction)
     for upper, rate in tax_config(status)["brackets"]:
         if taxable_income <= upper:
-            return f"{int(rate * 100)}%"
-    return "37%"
+            return f"{rate * 100:.2f}%"
+    return "37.00%"
 
 
 def gross_income_cap_for_target_bracket(status: FilingStatus, bracket_label: str) -> float:

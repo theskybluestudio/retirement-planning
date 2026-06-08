@@ -21,7 +21,7 @@ from app_state import (
     shared_widget_key,
     validate_assumptions,
 )
-from app_ui import format_currency, render_explainer, render_header, render_note
+from app_ui import format_currency, format_dataframe, format_percent, money_input, percent_input, render_explainer, render_header, render_note
 
 
 
@@ -63,16 +63,17 @@ def render_page() -> None:
                 labels["retirement_age"]: int(values["retirement_age"]),
                 labels["annual_contribution"]: format_currency(float(values["annual_contribution"])),
                 labels["planned_spending"]: format_currency(float(values["annual_retirement_spending"])),
-                labels["annual_return"]: f"{float(values['annual_return']) * 100:.1f}%",
-                labels["inflation"]: f"{float(values['inflation']) * 100:.1f}%",
+                labels["annual_return"]: format_percent(float(values["annual_return"])),
+                labels["inflation"]: format_percent(float(values["inflation"])),
                 labels["ss_claim_age"]: int(values["social_security_claim_age"]),
                 labels["target_bracket"] if "target_bracket" in labels else ("Target bracket" if not zh else "目标税档"): str(values["rmd_target_bracket"]),
-                labels["withdrawal_rate"] if "withdrawal_rate" in labels else ("Withdrawal rate" if not zh else "提款率"): f"{float(values['readiness_withdrawal_rate']) * 100:.1f}%",
+                labels["withdrawal_rate"] if "withdrawal_rate" in labels else ("Withdrawal rate" if not zh else "提款率"): format_percent(float(values["readiness_withdrawal_rate"])),
             }
         )
 
     st.subheader(labels["scenario_comparison"])
-    st.dataframe(pd.DataFrame(comparison_rows), use_container_width=True, hide_index=True)
+    comparison_df = pd.DataFrame(comparison_rows)
+    st.dataframe(comparison_df, use_container_width=True, hide_index=True)
 
     action_col, download_col = st.columns([1.0, 1.4])
     with action_col:
@@ -116,26 +117,26 @@ def render_page() -> None:
         st.selectbox(labels["filing_status"], options=["mfj", "single"], key=shared_widget_key("filing_status"), on_change=commit_shared_widget, args=("filing_status",))
 
         st.subheader(labels["accounts"])
-        st.number_input(labels["traditional_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("traditional_balance"), on_change=commit_shared_widget, args=("traditional_balance",))
-        st.number_input(labels["roth_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("roth_balance"), on_change=commit_shared_widget, args=("roth_balance",))
-        st.number_input(labels["taxable_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("taxable_balance"), on_change=commit_shared_widget, args=("taxable_balance",))
+        money_input(labels["traditional_balance"], min_value=0.0, key=shared_widget_key("traditional_balance"), on_change=commit_shared_widget, args=("traditional_balance",))
+        money_input(labels["roth_balance"], min_value=0.0, key=shared_widget_key("roth_balance"), on_change=commit_shared_widget, args=("roth_balance",))
+        money_input(labels["taxable_balance"], min_value=0.0, key=shared_widget_key("taxable_balance"), on_change=commit_shared_widget, args=("taxable_balance",))
         st.checkbox(labels["has_roth_ira"], key=shared_widget_key("has_roth_ira"), on_change=commit_shared_widget, args=("has_roth_ira",))
         st.checkbox(labels["has_taxable_brokerage"], key=shared_widget_key("has_taxable_brokerage"), on_change=commit_shared_widget, args=("has_taxable_brokerage",))
 
     with right:
         st.subheader(labels["cash_flow"])
-        st.number_input(labels["annual_contribution"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_contribution"), on_change=commit_shared_widget, args=("annual_contribution",))
-        st.number_input(labels["annual_retirement_spending"], min_value=0.0, step=5_000.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",))
-        st.number_input(labels["annual_ss_benefit"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_social_security_benefit"), on_change=commit_shared_widget, args=("annual_social_security_benefit",))
-        st.number_input(labels["annual_ss_benefit_fra"], min_value=0.0, step=1_000.0, key=shared_widget_key("social_security_fra_benefit"), on_change=commit_shared_widget, args=("social_security_fra_benefit",))
+        money_input(labels["annual_contribution"], min_value=0.0, key=shared_widget_key("annual_contribution"), on_change=commit_shared_widget, args=("annual_contribution",))
+        money_input(labels["annual_retirement_spending"], min_value=0.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",))
+        money_input(labels["annual_ss_benefit"], min_value=0.0, key=shared_widget_key("annual_social_security_benefit"), on_change=commit_shared_widget, args=("annual_social_security_benefit",))
+        money_input(labels["annual_ss_benefit_fra"], min_value=0.0, key=shared_widget_key("social_security_fra_benefit"), on_change=commit_shared_widget, args=("social_security_fra_benefit",))
         st.number_input(labels["ss_claim_age"], min_value=62, max_value=75, key=shared_widget_key("social_security_claim_age"), on_change=commit_shared_widget, args=("social_security_claim_age",))
-        st.number_input(labels["annual_pension_income"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_pension_income"), on_change=commit_shared_widget, args=("annual_pension_income",))
-        st.number_input(labels["annual_other_income"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_other_income"), on_change=commit_shared_widget, args=("annual_other_income",))
+        money_input(labels["annual_pension_income"], min_value=0.0, key=shared_widget_key("annual_pension_income"), on_change=commit_shared_widget, args=("annual_pension_income",))
+        money_input(labels["annual_other_income"], min_value=0.0, key=shared_widget_key("annual_other_income"), on_change=commit_shared_widget, args=("annual_other_income",))
 
         st.subheader(labels["market_tax"])
-        st.number_input(labels["annual_return"], min_value=0.0, max_value=0.20, step=0.005, format="%.3f", key=shared_widget_key("annual_return"), on_change=commit_shared_widget, args=("annual_return",))
-        st.number_input(labels["inflation"], min_value=0.0, max_value=0.10, step=0.005, format="%.3f", key=shared_widget_key("inflation"), on_change=commit_shared_widget, args=("inflation",))
-        st.number_input(labels["state_tax_rate"], min_value=0.0, max_value=0.20, step=0.005, format="%.3f", key=shared_widget_key("state_tax_rate"), on_change=commit_shared_widget, args=("state_tax_rate",))
+        percent_input(labels["annual_return"], min_value=0.0, max_value=0.20, key=shared_widget_key("annual_return"), on_change=commit_shared_widget, args=("annual_return",))
+        percent_input(labels["inflation"], min_value=0.0, max_value=0.10, key=shared_widget_key("inflation"), on_change=commit_shared_widget, args=("inflation",))
+        percent_input(labels["state_tax_rate"], min_value=0.0, max_value=0.20, key=shared_widget_key("state_tax_rate"), on_change=commit_shared_widget, args=("state_tax_rate",))
 
     errors, warnings = validate_assumptions()
     if errors:

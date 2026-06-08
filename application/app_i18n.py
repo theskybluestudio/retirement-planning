@@ -73,8 +73,8 @@ CATALOG: dict[str, Any] = {
         "total_portfolio": {"en": "Total investable portfolio", "zh": "总投资资产"},
         "planned_spending": {"en": "Planned annual spending", "zh": "计划年度支出"},
         "about_body": {
-            "en": "This page is the shared foundation for the rest of the app. You enter the main facts here — age, balances, spending, income, return assumptions, and tax assumptions — so the other tools can reuse the same baseline.\n\nThink of it as your planning profile. If these inputs are realistic, the rest of the calculators become much more useful.",
-            "zh": "这个页面是整个应用的共享基础。你在这里输入主要事实——年龄、账户余额、支出、收入、收益假设和税务假设——其他工具就可以复用同一套基础信息。\n\n可以把它理解成你的规划档案。这里的输入越接近现实，后面的计算器就越有参考价值。"
+            "en": "**1) Concept**\n\nThis is the shared planning profile for the whole app. Retirement tools all depend on the same baseline facts: age, balances, spending, income, return assumptions, and tax assumptions.\n\n**2) What this tool is about**\n\nThis page is where you define those baseline facts once so the rest of the app can reuse them. It acts as the common foundation behind the other calculators.\n\n**3) How to use it**\n\nEnter your best estimates in the sidebar first. Age, balances, spending, income, return assumptions, and tax assumptions all flow into the other tools, so better inputs here make every calculator more useful.",
+            "zh": "**1) 概念**\n\n这是整个应用共用的规划档案。所有退休工具都依赖同一套基础事实：年龄、账户余额、支出、收入、收益假设和税务假设。\n\n**2) 这个工具是做什么的**\n\n这个页面让你先定义这套基础事实，后面其他计算器都会复用它。它相当于整个应用的共同底座。\n\n**3) 如何使用**\n\n先在侧边栏输入你认为最接近现实的数字。年龄、余额、支出、收入、收益假设和税务假设都会流向其他工具，所以这里越准确，后面的计算器越有用。"
         },
         "note": {
             "en": "These values are stored in Streamlit session state for this browser session. You can now apply scenario presets, reset everything to defaults, download the current assumptions to JSON, or load a saved JSON file back into the app.",
@@ -124,8 +124,8 @@ CATALOG: dict[str, Any] = {
         "ladder_path": {"en": "Conversion ladder and balance path", "zh": "转换阶梯与余额路径"},
         "annual_path": {"en": "Annual conversion path", "zh": "年度转换路径"},
         "about_body": {
-            "en": "This tool helps you compare two broad ideas: converting some traditional retirement money into Roth over time, or leaving it alone. The goal is to see whether paying some tax earlier could reduce future RMD pressure and total lifetime costs.\n\nIt is not trying to predict the future perfectly. It is a planning model that helps you understand tradeoffs between taxes now, taxes later, and account balances later in retirement.",
-            "zh": "这个工具帮助你比较两种大方向：逐年把部分 traditional 退休账户资金转换到 Roth，或者保持不动。目标是看看提前交一些税，是否能降低未来 RMD 压力和终身总成本。\n\n它不是为了完美预测未来，而是一个帮助你理解取舍的规划模型：现在交税、以后交税，以及退休后账户余额之间的关系。"
+            "en": "**1) Concept**\n\nRMDs are required minimum distributions — the IRS forces money out of traditional tax-deferred accounts later in retirement. That matters because RMDs can raise taxable income, push you into a higher bracket, and increase taxes on Social Security or Medicare premiums. Roth conversions can help reduce future RMDs by moving money into a tax-free bucket earlier.\n\n**2) What this tool is about**\n\nThis tool compares a conversion path with a no-conversion path. It is meant to show whether paying tax earlier through Roth conversions may reduce later RMD pressure and improve your long-term retirement outcome.\n\n**3) How to use it**\n\nUse the sidebar to set the target bracket and any ACA/IRMAA toggles, then compare conversion vs. no-conversion paths. A higher target bracket usually means more aggressive conversions, while the ACA and IRMAA switches help show when extra income might create hidden costs. The page shows how much tax you may pay now, how RMDs may change later, and whether the conversion strategy improves the long-term picture for your retirement plan.",
+            "zh": "**1) 概念**\n\nRMD 是 required minimum distribution（最低强制提款）。到了后期，IRS 会要求你从传统递延税账户中取钱。它之所以重要，是因为 RMD 会抬高应税收入、可能把你推入更高税档，还可能影响社保税和 Medicare 保费。提前做 Roth 转换，可以把一部分钱移到免税账户，从而降低未来 RMD。\n\n**2) 这个工具是做什么的**\n\n这个工具比较“做转换”和“不做转换”两条路径。它的目的，是帮助你判断：通过更早做 Roth 转换提前交税，是否能降低未来 RMD 压力，并改善退休长期结果。\n\n**3) 如何使用**\n\n先在侧边栏设定目标税档，以及是否考虑 ACA / IRMAA，再比较“做转换”和“不做转换”两条路径。目标税档越高，通常代表转换越激进；ACA 和 IRMAA 开关则帮助你看到额外收入可能带来的隐藏成本。这个页面会展示你现在可能多交多少税、未来 RMD 可能怎么变化，以及这个策略是否能改善退休长期结果。"
         },
         "caption": {"en": "Planning approximation only. Verify actual tax execution with CPA or tax software.", "zh": "仅供规划近似使用。实际执行前请用 CPA 或报税软件复核。"},
     },
@@ -142,8 +142,8 @@ CATALOG: dict[str, Any] = {
         "covers": {"en": "On this simplified model, projected income covers target retirement spending.", "zh": "在这个简化模型中，预计收入可以覆盖目标退休支出。"},
         "table": {"en": "Projection table", "zh": "预测表"},
         "about_body": {
-            "en": "This tool asks a simple question: if you keep saving and investing from here, does your retirement plan appear to cover your future spending? It estimates how large your portfolio could grow, then compares that against retirement income needs.\n\nIt is best used as a first-pass reality check, not as a final answer. If this page already shows a shortfall or surplus, that gives you a useful starting point for deeper planning.",
-            "zh": "这个工具回答一个很直接的问题：如果你从现在开始继续储蓄和投资，你的退休计划看起来能不能覆盖未来支出？它会估算资产可能增长到多大，再和退休收入需求做对比。\n\n它最适合做第一层现实检查，而不是最终答案。如果这个页面已经显示出明显缺口或余量，那就是进一步规划的好起点。"
+            "en": "**1) Concept**\n\nRetirement readiness is the question of whether your savings and expected income can support your spending for as long as you need. The core idea is simple: growth, contributions, spending, inflation, and retirement income all have to work together.\n\n**2) What this tool is about**\n\nThis tool gives you a quick first-pass estimate of whether your current path appears sufficient. It turns your assumptions into a projected nest egg and compares that with expected retirement spending.\n\n**3) How to use it**\n\nUse the sidebar withdrawal rate as a stress test. A higher rate makes the plan look less durable, while a lower rate makes it look safer. The page estimates your projected portfolio path and compares it with planned retirement spending, so you can quickly see whether you look underfunded, roughly on track, or comfortably ahead.",
+            "zh": "**1) 概念**\n\n退休准备度要回答的是：你的储蓄和预计收入，能不能支撑你需要的退休支出。核心很简单：资产增长、持续储蓄、支出、通胀和退休收入必须一起配合。\n\n**2) 这个工具是做什么的**\n\n这个工具给你一个快速的第一层判断：按照你现在的路径，退休计划看起来够不够。它会把你的假设转成预计退休资产，并和预期退休支出做比较。\n\n**3) 如何使用**\n\n把侧边栏里的提款率当成压力测试。更高的提款率会让计划看起来更脆弱，更低的提款率会让计划看起来更安全。这个页面会估算你的资产轨迹，并与退休支出做对比，让你快速判断自己是偏不足、基本打平，还是比较充裕。"
         },
         "caption": {"en": "This version is still deterministic. It now shows both nominal and inflation-adjusted growth, but it still does not model taxes or volatility.", "zh": "这个版本仍是确定性模型。它现在展示名义增长和通胀调整后的增长，但仍未建模税务或波动率。"},
     },
@@ -158,8 +158,8 @@ CATALOG: dict[str, Any] = {
         "quick_read": {"en": "Quick read", "zh": "快速解读"},
         "comparison": {"en": "Claiming comparison", "zh": "领取对比"},
         "about_body": {
-            "en": "This tool helps you see how Social Security changes when you claim earlier or later. Claiming earlier usually means smaller monthly checks; waiting longer usually means larger ones.\n\nThe point is not just to find the mathematically biggest lifetime number. It also helps you think about tradeoffs between earlier cash flow, longevity risk, and simplicity.",
-            "zh": "这个工具帮助你看到：如果更早或更晚领取社保，结果会怎样变化。更早领取通常意味着每月金额更低；等待更久通常意味着每月金额更高。\n\n重点不只是找出“终身总额最大”的选项，也是在帮助你思考更早拿现金、长寿风险和决策简洁性之间的取舍。"
+            "en": "**1) Concept**\n\nSocial Security is an inflation-adjusted lifetime income stream, and the claiming age changes the monthly benefit a lot. Claiming early gives you cash sooner but usually at a lower monthly amount; waiting usually increases the check and can help protect against longevity risk.\n\n**2) What this tool is about**\n\nThis tool compares claiming ages and their tradeoffs. It helps you see not just which age gives the highest lifetime total in the model, but also how monthly income changes across choices.\n\n**3) How to use it**\n\nUse the sidebar to set your longevity horizon and the age you want highlighted, then compare claiming ages side by side. A longer longevity age makes delayed claiming look more valuable, while the highlight age helps you focus on the age you care about most. This helps you weigh monthly cash flow, lifetime income, and the practical tradeoff between starting earlier versus waiting for a larger benefit.",
+            "zh": "**1) 概念**\n\n社保是一种带通胀调整的终身收入，而领取年龄会显著影响每月金额。提前领取能更早拿到现金，但通常每月更少；晚一点领取则通常能拿到更高金额，也更能对冲长寿风险。\n\n**2) 这个工具是做什么的**\n\n这个工具比较不同领取年龄及其取舍。它不仅帮助你看模型里哪个年龄的终身总额更高，也帮助你看到每月收入会如何变化。\n\n**3) 如何使用**\n\n先在侧边栏设定寿命比较年龄，以及你想高亮的领取年龄，再并排比较不同领取年龄。比较的寿命年龄越长，延迟领取看起来越有价值；高亮年龄则帮助你聚焦自己最关心的那个年龄。这能帮助你权衡每月现金流、终身收入，以及“早点开始”和“等更高金额”之间的实际取舍。"
         },
         "caption": {"en": "This MVP uses simplified claiming factors and ignores taxation, COLA details, spousal benefits, and discount rates.", "zh": "这个 MVP 使用了简化的领取系数，未纳入税务、COLA、配偶收益和贴现率。"},
     },
@@ -174,8 +174,8 @@ CATALOG: dict[str, Any] = {
         "thresholds": {"en": "2026 thresholds", "zh": "2026 档位"},
         "quick_read": {"en": "Quick read", "zh": "快速解读"},
         "about_body": {
-            "en": "This tool shows whether an income event could push you into a higher Medicare IRMAA tier. In plain terms, it helps you see when extra income may trigger higher Medicare premiums later.\n\nThat matters because some retirement moves — such as Roth conversions, bonuses, or large capital gains — can have side effects beyond regular tax bills.",
-            "zh": "这个工具用来查看某个收入事件会不会把你推到更高的 Medicare IRMAA 档位。简单说，它帮助你看清：额外收入是否会在之后带来更高的 Medicare 保费。\n\n这很重要，因为有些退休规划动作——比如 Roth 转换、奖金收入或大额资本利得——除了普通税负，还可能带来额外影响。"
+            "en": "**1) Concept**\n\nIRMAA is the income-related monthly adjustment amount: a Medicare surcharge that kicks in when your income is high enough. It matters because extra income from Roth conversions, bonuses, capital gains, or withdrawals can raise your Medicare premiums later.\n\n**2) What this tool is about**\n\nThis tool is a threshold checker. It shows whether an income event pushes you into a more expensive Medicare premium tier and how much headroom you have left.\n\n**3) How to use it**\n\nEnter a one-time extra income amount in the sidebar and see whether it crosses a threshold. Larger income values can push you into a higher IRMAA tier, so this helps you judge whether a Roth conversion or other income move may create hidden Medicare costs.",
+            "zh": "**1) 概念**\n\nIRMAA 是 income-related monthly adjustment amount，也就是 Medicare 的收入附加费。只要收入高到一定程度，就会触发这个附加费。它很重要，因为 Roth 转换、奖金、资本利得或提款都可能在之后抬高 Medicare 保费。\n\n**2) 这个工具是做什么的**\n\n这个工具本质上是一个档位检查器。它会显示某个收入事件是否会把你推入更贵的 Medicare 保费档位，以及你距离当前上限还剩多少空间。\n\n**3) 如何使用**\n\n在侧边栏输入一次性的额外收入，看看它是否跨过档位。收入越高，越可能进入更高的 IRMAA 档位，所以这能帮助你判断 Roth 转换或其他收入动作会不会带来隐藏的 Medicare 成本。"
         },
         "caption": {"en": "This page uses the same 2026 threshold table as the conversion model. Real Medicare billing uses lookback rules and other details.", "zh": "该页面使用与转换模型相同的 2026 档位表。真实 Medicare 计费还涉及回溯规则和其他细节。"},
     },
@@ -188,8 +188,8 @@ CATALOG: dict[str, Any] = {
         "paths": {"en": "Portfolio paths", "zh": "资产路径"},
         "details": {"en": "Scenario details", "zh": "情景详情"},
         "about_body": {
-            "en": "This tool explains sequence risk: even if two retirees get the same average return, bad returns early in retirement can do much more damage than bad returns later.\n\nThat happens because withdrawals during down markets reduce the money that gets a chance to recover. This page helps make that idea visible instead of abstract.",
-            "zh": "这个工具解释“收益顺序风险”：即使两位退休者拿到相同的平均收益率，如果坏收益出现在退休早期，造成的伤害往往比后期更大。\n\n原因在于，市场下跌时发生的提款会减少后面能够反弹的本金。这个页面的作用，就是把这个概念从抽象变成直观。"
+            "en": "**1) Concept**\n\nSequence risk means the order of returns matters. Two portfolios can have the same average return, but the one that suffers losses early in retirement can be hurt much more because withdrawals happen while the balance is down.\n\n**2) What this tool is about**\n\nThis tool is a visual comparison of two return paths with the same average return set but different ordering. Its job is to make sequence risk easy to see instead of just describing it in theory.\n\n**3) How to use it**\n\nThere are no inputs here; the page uses a fixed return sequence so you can compare a bad-early path against a bad-late path. This helps you understand why spending flexibility, cash buffers, or withdrawal timing can matter so much once retirement withdrawals begin.",
+            "zh": "**1) 概念**\n\n收益顺序风险的意思是：收益出现的先后顺序很重要。两个组合可能平均收益一样，但如果坏收益出现在退休早期，伤害会更大，因为那时你还在提款，账户更难恢复。\n\n**2) 这个工具是做什么的**\n\n这个工具把两条平均收益相同、但顺序不同的路径放在一起可视化比较。它的作用，是把收益顺序风险从理论说明变成直观感受。\n\n**3) 如何使用**\n\n这里没有可调输入；页面使用固定的收益序列，方便你对比“前期先坏”和“后期才坏”的路径。这样你就能更直观看到，为什么退休开始提款后，支出弹性、现金缓冲和提款时点会变得很重要。"
         },
         "caption": {"en": "These two scenarios use the same return set in a different order. That order alone can materially change outcomes once withdrawals begin.", "zh": "这两个情景使用相同的收益集合，只是顺序不同。一旦开始提款，顺序本身就可能显著改变结果。"},
     },
@@ -206,8 +206,8 @@ CATALOG: dict[str, Any] = {
         "withdrawal_path": {"en": "Withdrawal path", "zh": "提款路径"},
         "scenario_detail": {"en": "Scenario detail", "zh": "情景详情"},
         "about_body": {
-            "en": "This tool compares two spending styles in retirement: taking the same amount every year, or adjusting spending a little when the portfolio gets stressed or unusually strong.\n\nThe main idea is that flexibility can sometimes make a portfolio last longer or preserve more value, but it asks you to accept that spending may not stay perfectly smooth every year.",
-            "zh": "这个工具比较两种退休支出方式：每年拿固定金额，或者在资产承压或表现特别强的时候，稍微调整支出。\n\n核心思想是：适度灵活有时能让资产持续更久，或保留更多余额，但代价是你的支出不一定每年都完全平滑。"
+            "en": "**1) Concept**\n\nSafe withdrawal planning is about balancing lifestyle and portfolio survival. A fixed spending rule is simple, but a flexible rule can sometimes help the portfolio last longer by reducing withdrawals when markets are weak and allowing a bit more when markets are strong.\n\n**2) What this tool is about**\n\nThis tool compares a fixed-withdrawal approach against a guardrails approach. It is meant to show the tradeoff between steadier spending and better portfolio resilience.\n\n**3) How to use it**\n\nUse the sidebar floor and ceiling guardrails to decide when spending should flex. A lower floor makes the plan more aggressive about increasing withdrawals, while a tighter ceiling forces cuts sooner. Compare the fixed path with the guardrail path to see how much spending flexibility might improve ending balances or total withdrawals in a rough retirement simulation.",
+            "zh": "**1) 概念**\n\n安全提款规划的核心，是在生活质量和资产寿命之间找平衡。固定支出最简单，但灵活规则有时能在市场较弱时少取一点、在市场较强时多取一点，从而延长资产寿命。\n\n**2) 这个工具是做什么的**\n\n这个工具比较固定提款方式和护栏提款方式。它的重点，是让你看到“支出更平稳”和“资产更有韧性”之间的取舍。\n\n**3) 如何使用**\n\n用侧边栏里的下护栏和上护栏决定支出何时该变化。更低的下护栏会让计划更积极地增加提款，更紧的上护栏则会更早迫使你削减支出。把固定路径和护栏路径对比一下，看看更灵活的支出是否能改善期末余额或总提款。"
         },
         "caption": {"en": "This is a simple illustrative guardrails model, not a complete Guyton-Klinger or VPW implementation.", "zh": "这是一个用于说明概念的简化护栏模型，不是完整的 Guyton-Klinger 或 VPW 实现。"}
     },
@@ -221,8 +221,8 @@ CATALOG: dict[str, Any] = {
         "estimated_taxes": {"en": "Estimated taxes", "zh": "估算税负"},
         "balances_after_year": {"en": "Balances after one year", "zh": "一年后的余额"},
         "about_body": {
-            "en": "This tool compares different account-drawdown orders: taking money from taxable accounts first, traditional accounts first, or Roth first. The reason this matters is that the order can change taxes and how long each bucket lasts.\n\nIt is a simplified comparison, but it helps you see that withdrawal strategy is not just about where the cash comes from — it is also about tax drag and preserving flexibility.",
-            "zh": "这个工具比较不同的提款顺序：先从 taxable 账户取、先从 traditional 账户取，还是先从 Roth 账户取。之所以重要，是因为顺序不同会影响税负，也会影响每个账户还能撑多久。\n\n它是一个简化版比较，但足以帮助你看到：提款策略不只是“钱从哪里来”，还关系到税务拖累和未来灵活性。"
+            "en": "**1) Concept**\n\nWithdrawal order matters because different account types are taxed differently. Taxable, traditional, and Roth accounts each have different tax rules, so the sequence you withdraw from can change taxes today and the flexibility you keep for later.\n\n**2) What this tool is about**\n\nThis tool compares a few simple withdrawal sequences in a one-year snapshot. Its purpose is to show how taxes and ending balances shift when you pull from different account buckets first.\n\n**3) How to use it**\n\nThis page uses your shared assumptions balances, so make sure those are realistic before comparing orders. Compare a few simple drawdown orders and see which one creates the lowest estimated tax in this one-year snapshot. It is a starting point for thinking about tax-aware retirement spending, not a full optimization engine.",
+            "zh": "**1) 概念**\n\n提款顺序很重要，因为不同账户的税务规则不同。taxable、traditional 和 Roth 账户各有不同税法，所以提款顺序会影响现在的税负，也会影响未来保留的灵活性。\n\n**2) 这个工具是做什么的**\n\n这个工具在“一年快照”里比较几种简单提款顺序。它的作用，是让你看到先从不同账户取钱时，税负和期末余额会怎么变化。\n\n**3) 如何使用**\n\n这个页面使用你的共享假设余额，所以在比较顺序前先确认这些数字是现实的。对比几种简单的提款顺序，看看在这一年的快照里，哪一种估算税负最低。它适合作为税务友好型退休支出的起点，但还不是完整的优化引擎。"
         },
         "caption": {"en": "This is a rule-of-thumb comparison. It does not yet model tax brackets, Social Security taxation, or multi-year optimization.", "zh": "这是一个经验法则式比较。它尚未建模税档、社保税务或多年优化。"}
     },
@@ -243,8 +243,8 @@ CATALOG: dict[str, Any] = {
         "phase_averages": {"en": "Phase averages", "zh": "阶段平均值"},
         "detailed_schedule": {"en": "Detailed schedule", "zh": "详细计划表"},
         "about_body": {
-            "en": "This tool models the idea that retirement spending often changes over time instead of staying flat forever. Many people spend more in active early years, less in slower middle years, and then potentially more again later because of healthcare.\n\nThe goal is to replace one unrealistic flat spending line with a more human pattern.",
-            "zh": "这个工具体现一个常见现实：退休支出往往会随时间变化，而不是永远保持一条直线。很多人在退休初期更活跃、花得更多；中期放缓；晚年又可能因为医疗开支而上升。\n\n它的目标，是用更贴近人的支出曲线，替代过于理想化的固定支出线。"
+            "en": "**1) Concept**\n\nRetirement spending is often not flat. Many retirees spend more in active early years, less in slower middle years, and potentially more later because healthcare costs rise. A spending smile tries to capture that shape.\n\n**2) What this tool is about**\n\nThis tool turns that spending-smile idea into a simple year-by-year model. It helps you visualize how different life phases can change your retirement spending path.\n\n**3) How to use it**\n\nAdjust the go-go, slow-go, and no-go phase lengths and spending multipliers in the sidebar to match your own expected lifestyle. Higher early multipliers raise first-years spending, while a bigger healthcare step-up increases late-life costs. The chart helps you turn a vague idea about changing spending into a concrete yearly schedule.",
+            "zh": "**1) 概念**\n\n退休支出通常不是一条直线。很多人在退休初期更活跃、花得更多；中期放缓；后期因为医疗成本上升，支出可能再次增加。支出微笑曲线就是用来模拟这种形状。\n\n**2) 这个工具是做什么的**\n\n这个工具把“支出微笑曲线”变成一个简单的逐年模型。它帮助你可视化不同人生阶段如何改变退休支出路径。\n\n**3) 如何使用**\n\n在侧边栏调整 go-go、slow-go、no-go 三个阶段的年数和支出倍数，以匹配你的生活方式。前期倍数越高，前几年支出越大；医疗增量越高，晚年成本越高。这个图能把“支出会变化”这种模糊想法，变成具体的年度计划。"
         },
         "caption": {"en": "This is a planning shape tool. It helps avoid the common mistake of assuming retirement spending stays flat forever.", "zh": "这是一个用于规划支出形状的工具。它帮助避免“退休支出永远保持不变”这一常见错误。"}
     },
@@ -258,8 +258,8 @@ CATALOG: dict[str, Any] = {
         "retire_later": {"en": "Retire 3 years later", "zh": "晚退休 3 年"},
         "tradeoff_ideas": {"en": "Tradeoff ideas", "zh": "权衡建议"},
         "about_body": {
-            "en": "This tool helps answer a practical question: if your current savings path is not enough, how much more would you need to save to reach your target? It also shows one common alternative — retiring a little later.\n\nThat makes it useful for turning a vague concern into a concrete number and a few realistic tradeoffs.",
-            "zh": "这个工具回答一个很实用的问题：如果你现在的储蓄路径不够，要多存多少钱才能达到目标？它也会展示一个常见替代方案——晚几年退休。\n\n这样一来，它能把模糊的焦虑变成更具体的数字，以及几个现实可行的取舍。"
+            "en": "**1) Concept**\n\nSavings rate is the bridge between where you are now and the retirement target you want. If your current savings path is too slow, you either need a higher annual contribution, a better return assumption, or more time.\n\n**2) What this tool is about**\n\nThis tool estimates the catch-up effort needed to reach a target. It shows how much more you may need to save each year, and it also illustrates the effect of giving yourself more time.\n\n**3) How to use it**\n\nSet the target portfolio in the sidebar, then compare the extra annual savings needed to hit it. A higher target needs more savings, a higher return assumption lowers the required contribution, and more years to retirement make the goal easier to reach. It also shows the effect of retiring a little later, which is often the simplest tradeoff.",
+            "zh": "**1) 概念**\n\n储蓄率决定了你从现在走向退休目标的速度。如果当前储蓄路径太慢，你就需要提高年度储蓄、改善收益假设，或者多给自己一点时间。\n\n**2) 这个工具是做什么的**\n\n这个工具估算为了达到目标，你需要补多少“追赶力度”。它会展示你每年可能还要多存多少，也会说明多给自己几年时间会有什么影响。\n\n**3) 如何使用**\n\n在侧边栏设定目标资产，再比较要达到它还需要多存多少。目标越高，需要的储蓄越多；收益假设越高，所需年度储蓄越低；距离退休的年数越长，目标越容易实现。它也会展示晚一点退休的效果，这通常是最直接的取舍之一。"
         },
         "caption": {"en": "This page is intentionally simple: it helps frame the catch-up question quickly before adding taxes or more complex planning assumptions.", "zh": "这个页面有意保持简单：它帮助你在加入税务或更复杂规划假设之前，先快速框定追赶储蓄问题。"}
     },

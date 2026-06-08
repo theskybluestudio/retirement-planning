@@ -18,6 +18,7 @@ def render_page() -> None:
     render_explainer(common["about_tool"], labels["about_body"])
 
     with st.sidebar:
+        st.divider()
         st.header(common["page_specific_inputs"])
         extra_income = st.number_input(labels["extra_income"], min_value=0.0, value=25_000.0, step=1_000.0, key="irmaa_extra_income")
 

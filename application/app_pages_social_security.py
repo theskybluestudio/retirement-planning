@@ -30,6 +30,7 @@ def render_page() -> None:
     render_explainer(common["about_tool"], labels["about_body"])
 
     with st.sidebar:
+        st.divider()
         st.header(common["page_specific_inputs"])
         longevity_age = st.number_input(labels["longevity_age"], min_value=70, max_value=100, key="ss_longevity_age")
         selected_claim_age = st.slider(labels["highlight_age"], min_value=62, max_value=70, value=67, key="ss_selected_claim_age")

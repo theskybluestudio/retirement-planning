@@ -18,8 +18,9 @@ from app_pages_withdrawal_order import render_page as render_withdrawal_order
 from app_shell import setup_page
 
 
-def build_navigation() -> list[tuple[str, st.Page]]:
+def build_navigation() -> dict[str, list[st.Page]]:
     lang = st.session_state.get("language", "en")
+    navigation = section("navigation")
     assumptions = section("assumptions")
     rmd = section("rmd")
     readiness = section("readiness")
@@ -31,34 +32,45 @@ def build_navigation() -> list[tuple[str, st.Page]]:
     spending_smile = section("spending_smile")
     savings_rate = section("savings_rate")
 
-    return [
-        ("Home" if lang == "en" else "首页", st.Page(render_home, title="Home" if lang == "en" else "首页", url_path="home", default=True)),
-        (assumptions["title"], st.Page(render_assumptions, title=assumptions["title"], url_path="shared-assumptions")),
-        (rmd["title"], st.Page(render_rmd_strategy, title=rmd["title"], url_path="rmd-roth-conversion-strategy")),
-        (readiness["title"], st.Page(render_readiness, title=readiness["title"], url_path="retirement-readiness")),
-        (social_security["title"], st.Page(render_social_security, title=social_security["title"], url_path="social-security-optimizer")),
-        (irmaa["title"], st.Page(render_irmaa, title=irmaa["title"], url_path="medicare-irmaa")),
-        (sequence["title"], st.Page(render_sequence_risk, title=sequence["title"], url_path="sequence-risk-visualizer")),
-        (safe_withdrawal["title"], st.Page(render_safe_withdrawal, title=safe_withdrawal["title"], url_path="safe-withdrawal-guardrails")),
-        (withdrawal_order["title"], st.Page(render_withdrawal_order, title=withdrawal_order["title"], url_path="withdrawal-order")),
-        (spending_smile["title"], st.Page(render_spending_smile, title=spending_smile["title"], url_path="spending-smile-planner")),
-        (savings_rate["title"], st.Page(render_savings_rate, title=savings_rate["title"], url_path="savings-rate-catch-up")),
+    home_page = st.Page(render_home, title="Home" if lang == "en" else "首页", url_path="home", default=True)
+    assumptions_page = st.Page(render_assumptions, title=assumptions["title"], url_path="shared-assumptions")
+    basic_tools = [
+        st.Page(render_readiness, title=readiness["title"], url_path="retirement-readiness"),
+        st.Page(render_social_security, title=social_security["title"], url_path="social-security-optimizer"),
+        st.Page(render_savings_rate, title=savings_rate["title"], url_path="savings-rate-catch-up"),
+        st.Page(render_spending_smile, title=spending_smile["title"], url_path="spending-smile-planner"),
+    ]
+    advanced_tools = [
+        st.Page(render_rmd_strategy, title=rmd["title"], url_path="rmd-roth-conversion-strategy"),
+        st.Page(render_irmaa, title=irmaa["title"], url_path="medicare-irmaa"),
+        st.Page(render_sequence_risk, title=sequence["title"], url_path="sequence-risk-visualizer"),
+        st.Page(render_safe_withdrawal, title=safe_withdrawal["title"], url_path="safe-withdrawal-guardrails"),
+        st.Page(render_withdrawal_order, title=withdrawal_order["title"], url_path="withdrawal-order"),
     ]
 
+    return {
+        navigation["getting_started"]: [home_page, assumptions_page],
+        navigation["basic_tools"]: basic_tools,
+        navigation["advanced_tools"]: advanced_tools,
+    }
 
 
-def render_sidebar_navigation(nav_items: list[tuple[str, st.Page]]) -> None:
+def render_sidebar_navigation(nav_sections: dict[str, list[st.Page]]) -> None:
     with st.sidebar:
-        for label, page in nav_items:
-            st.page_link(page, label=label, use_container_width=True)
+        for section_label, pages in nav_sections.items():
+            if section_label:
+                st.markdown(f"**{section_label}**")
+            for page in pages:
+                st.page_link(page, label=page.title, use_container_width=True)
+            st.write("")
 
 
 
 def main() -> None:
     setup_page("Retirement Planning, Demystified")
-    nav_items = build_navigation()
-    navigation = st.navigation([page for _, page in nav_items], position="hidden")
-    render_sidebar_navigation(nav_items)
+    nav_sections = build_navigation()
+    navigation = st.navigation([page for pages in nav_sections.values() for page in pages], position="hidden")
+    render_sidebar_navigation(nav_sections)
     navigation.run()
 
 

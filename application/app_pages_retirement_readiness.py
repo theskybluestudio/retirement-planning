@@ -18,6 +18,7 @@ def render_page() -> None:
     render_explainer(common["about_tool"], labels["about_body"])
 
     with st.sidebar:
+        st.divider()
         st.header(common["page_specific_inputs"])
         withdrawal_rate = st.number_input(labels["withdrawal_rate"], min_value=0.01, max_value=0.10, step=0.005, format="%.3f", key="readiness_withdrawal_rate")
 

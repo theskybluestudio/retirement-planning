@@ -17,6 +17,7 @@ def render_page() -> None:
     render_explainer(common["about_tool"], labels["about_body"])
 
     with st.sidebar:
+        st.divider()
         st.header(common["page_specific_inputs"])
         go_go_years = st.number_input(labels["go_go_years"], min_value=1, max_value=20, value=10, key="smile_go_go_years")
         go_go_multiplier = st.number_input(labels["go_go_multiplier"], min_value=0.5, max_value=2.0, value=1.15, step=0.05, key="smile_go_go_multiplier")

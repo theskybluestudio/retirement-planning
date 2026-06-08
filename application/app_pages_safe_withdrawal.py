@@ -51,6 +51,7 @@ def render_page() -> None:
     render_explainer(common["about_tool"], labels["about_body"])
 
     with st.sidebar:
+        st.divider()
         st.header(common["page_specific_inputs"])
         floor_rate = st.number_input(labels["lower_guardrail"], min_value=0.01, max_value=0.10, step=0.005, format="%.3f", key="guard_floor_rate")
         ceiling_rate = st.number_input(labels["upper_guardrail"], min_value=0.02, max_value=0.15, step=0.005, format="%.3f", key="guard_ceiling_rate")

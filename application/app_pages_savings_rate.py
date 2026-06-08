@@ -34,6 +34,7 @@ def render_page() -> None:
     render_explainer(common["about_tool"], labels["about_body"])
 
     with st.sidebar:
+        st.divider()
         st.header(common["page_specific_inputs"])
         target_portfolio = st.number_input(labels["target_portfolio"], min_value=0.0, step=50_000.0, key="save_target_portfolio")
 

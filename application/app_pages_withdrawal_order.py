@@ -54,6 +54,7 @@ def render_page() -> None:
     render_explainer(common["about_tool"], labels["about_body"])
 
     with st.sidebar:
+        st.divider()
         st.header(common["using_shared_assumptions"])
         st.caption(common["update_shared_assumptions"])
 

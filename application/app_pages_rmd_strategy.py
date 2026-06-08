@@ -18,6 +18,7 @@ def render_page() -> None:
     render_explainer(common["about_tool"], labels["about_body"])
 
     with st.sidebar:
+        st.divider()
         st.header(common["page_specific_inputs"])
         target_bracket = st.selectbox(labels["target_bracket"], options=["12%", "22%", "24%", "32%"], key="rmd_target_bracket")
         use_aca_model = st.checkbox(labels["aca"], key="rmd_use_aca_model")

@@ -17,6 +17,23 @@ def render_page() -> None:
     render_header(labels["title"], labels["subtitle"])
     render_explainer(common["about_tool"], labels["about_body"])
 
+    with st.expander(common["shared_inputs"], expanded=False):
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            st.number_input(labels["current_age"], min_value=18, max_value=80, key="current_age")
+            st.number_input(labels["retirement_age"], min_value=25, max_value=80, key="retirement_age")
+        with c2:
+            st.number_input(labels["traditional_balance"], min_value=0.0, step=10_000.0, key="traditional_balance")
+            st.number_input(labels["roth_balance"], min_value=0.0, step=10_000.0, key="roth_balance")
+            st.number_input(labels["taxable_balance"], min_value=0.0, step=10_000.0, key="taxable_balance")
+        with c3:
+            st.number_input(labels["annual_contribution"], min_value=0.0, step=1_000.0, key="annual_contribution")
+            st.number_input(labels["annual_return"], min_value=0.0, max_value=0.20, step=0.005, format="%.3f", key="annual_return")
+            st.number_input(labels["inflation"], min_value=0.0, max_value=0.10, step=0.005, format="%.3f", key="inflation")
+            st.number_input(labels["annual_retirement_spending"], min_value=0.0, step=5_000.0, key="annual_retirement_spending")
+            st.number_input(labels["annual_ss_benefit"], min_value=0.0, step=1_000.0, key="annual_social_security_benefit")
+            st.number_input(labels["annual_pension_income"], min_value=0.0, step=1_000.0, key="annual_pension_income")
+
     with st.sidebar:
         st.divider()
         st.header(common["page_specific_inputs"])

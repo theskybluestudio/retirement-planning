@@ -29,6 +29,9 @@ def render_page() -> None:
     render_header(labels["title"], labels["subtitle"])
     render_explainer(common["about_tool"], labels["about_body"])
 
+    with st.expander(common["shared_inputs"], expanded=False):
+        st.number_input(labels["annual_ss_benefit_fra"], min_value=0.0, step=1_000.0, key="social_security_fra_benefit")
+
     with st.sidebar:
         st.divider()
         st.header(common["page_specific_inputs"])

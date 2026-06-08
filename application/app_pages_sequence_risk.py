@@ -32,9 +32,19 @@ def simulate_path(start_balance: float, annual_withdrawal: float, returns: list[
 def render_page() -> None:
     zh = st.session_state.get("language", "en") == "zh"
     common = section("common")
+    assumptions = section("assumptions")
     labels = section("sequence")
     render_header(labels["title"], labels["subtitle"])
     render_explainer(common["about_tool"], labels["about_body"])
+
+    with st.expander(common["shared_inputs"], expanded=False):
+        c1, c2 = st.columns(2)
+        with c1:
+            st.number_input(assumptions["traditional_balance"], min_value=0.0, step=10_000.0, key="traditional_balance")
+            st.number_input(assumptions["roth_balance"], min_value=0.0, step=10_000.0, key="roth_balance")
+            st.number_input(assumptions["taxable_balance"], min_value=0.0, step=10_000.0, key="taxable_balance")
+        with c2:
+            st.number_input(assumptions["annual_retirement_spending"], min_value=0.0, step=5_000.0, key="annual_retirement_spending")
 
     start_balance = get_total_portfolio()
     annual_withdrawal = float(st.session_state.annual_retirement_spending)

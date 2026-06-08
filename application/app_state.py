@@ -83,9 +83,9 @@ ALL_DEFAULTS = SHARED_DEFAULTS | PAGE_DEFAULTS
 
 
 def init_session_state() -> None:
-    for key, value in ALL_DEFAULTS.items():
-        if key not in st.session_state:
-            st.session_state[key] = value
+    if not st.session_state.get("_initialized_defaults"):
+        reset_assumptions()
+        st.session_state._initialized_defaults = True
 
 
 

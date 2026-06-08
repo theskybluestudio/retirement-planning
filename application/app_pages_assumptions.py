@@ -3,11 +3,14 @@ from __future__ import annotations
 
 from datetime import datetime
 
+import pandas as pd
 import streamlit as st
 
 from app_i18n import section, t
 from app_state import (
+    PAGE_DEFAULTS,
     SCENARIO_PRESETS,
+    SHARED_DEFAULTS,
     apply_preset,
     export_assumptions,
     get_total_portfolio,
@@ -22,6 +25,7 @@ from app_ui import format_currency, render_explainer, render_header, render_note
 def render_page() -> None:
     labels = section("assumptions")
     preset_labels = section("presets")
+    zh = st.session_state.get("language", "en") == "zh"
     render_header(
         labels["title"],
         labels["subtitle"],
@@ -41,6 +45,31 @@ def render_page() -> None:
             if st.button(label, use_container_width=True):
                 apply_preset(preset_name)
                 st.rerun()
+
+    comparison_rows = []
+    for preset_name, overrides in SCENARIO_PRESETS.items():
+        values = (SHARED_DEFAULTS | PAGE_DEFAULTS | overrides)
+        comparison_rows.append(
+            {
+                "scenario": {
+                    "Base": preset_labels["base"],
+                    "Conservative": preset_labels["conservative"],
+                    "Aggressive": preset_labels["aggressive"],
+                    "Early Retirement": preset_labels["early_retirement"],
+                }.get(preset_name, preset_name),
+                labels["retirement_age"]: int(values["retirement_age"]),
+                labels["annual_contribution"]: format_currency(float(values["annual_contribution"])),
+                labels["planned_spending"]: format_currency(float(values["annual_retirement_spending"])),
+                labels["annual_return"]: f"{float(values['annual_return']) * 100:.1f}%",
+                labels["inflation"]: f"{float(values['inflation']) * 100:.1f}%",
+                labels["ss_claim_age"]: int(values["social_security_claim_age"]),
+                labels["target_bracket"] if "target_bracket" in labels else ("Target bracket" if not zh else "目标税档"): str(values["rmd_target_bracket"]),
+                labels["withdrawal_rate"] if "withdrawal_rate" in labels else ("Withdrawal rate" if not zh else "提款率"): f"{float(values['readiness_withdrawal_rate']) * 100:.1f}%",
+            }
+        )
+
+    st.subheader(labels["scenario_comparison"])
+    st.dataframe(pd.DataFrame(comparison_rows), use_container_width=True, hide_index=True)
 
     action_col, download_col = st.columns([1.0, 1.4])
     with action_col:

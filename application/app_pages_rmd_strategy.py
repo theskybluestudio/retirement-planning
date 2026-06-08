@@ -5,6 +5,7 @@ import pandas as pd
 import streamlit as st
 
 from app_i18n import section
+from app_state import commit_shared_widget, prime_shared_widget, shared_widget_key
 from app_ui import format_currency, render_explainer, render_header, render_note
 from roth_conversion_engine import PlanInputs, compare_strategies, result_rows
 
@@ -18,28 +19,36 @@ def render_page() -> None:
     render_header(labels["title"], labels["subtitle"])
     render_explainer(common["about_tool"], labels["about_body"])
 
+    for key in [
+        "current_age", "retirement_age", "life_expectancy", "traditional_balance", "roth_balance", "taxable_balance",
+        "has_roth_ira", "has_taxable_brokerage", "annual_contribution", "annual_retirement_spending",
+        "annual_social_security_benefit", "annual_pension_income", "annual_other_income", "annual_return",
+        "state_tax_rate", "filing_status", "social_security_claim_age",
+    ]:
+        prime_shared_widget(key)
+
     with st.expander(common["shared_inputs"], expanded=False):
         c1, c2, c3 = st.columns(3)
         with c1:
-            st.number_input(assumptions["current_age"], min_value=18, max_value=80, key="current_age")
-            st.number_input(assumptions["retirement_age"], min_value=25, max_value=80, key="retirement_age")
-            st.number_input(assumptions["life_expectancy"], min_value=70, max_value=105, key="life_expectancy")
+            st.number_input(assumptions["current_age"], min_value=18, max_value=80, key=shared_widget_key("current_age"), on_change=commit_shared_widget, args=("current_age",))
+            st.number_input(assumptions["retirement_age"], min_value=25, max_value=80, key=shared_widget_key("retirement_age"), on_change=commit_shared_widget, args=("retirement_age",))
+            st.number_input(assumptions["life_expectancy"], min_value=70, max_value=105, key=shared_widget_key("life_expectancy"), on_change=commit_shared_widget, args=("life_expectancy",))
         with c2:
-            st.number_input(assumptions["traditional_balance"], min_value=0.0, step=10_000.0, key="traditional_balance")
-            st.number_input(assumptions["roth_balance"], min_value=0.0, step=10_000.0, key="roth_balance")
-            st.number_input(assumptions["taxable_balance"], min_value=0.0, step=10_000.0, key="taxable_balance")
-            st.checkbox(assumptions["has_roth_ira"], key="has_roth_ira")
-            st.checkbox(assumptions["has_taxable_brokerage"], key="has_taxable_brokerage")
+            st.number_input(assumptions["traditional_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("traditional_balance"), on_change=commit_shared_widget, args=("traditional_balance",))
+            st.number_input(assumptions["roth_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("roth_balance"), on_change=commit_shared_widget, args=("roth_balance",))
+            st.number_input(assumptions["taxable_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("taxable_balance"), on_change=commit_shared_widget, args=("taxable_balance",))
+            st.checkbox(assumptions["has_roth_ira"], key=shared_widget_key("has_roth_ira"), on_change=commit_shared_widget, args=("has_roth_ira",))
+            st.checkbox(assumptions["has_taxable_brokerage"], key=shared_widget_key("has_taxable_brokerage"), on_change=commit_shared_widget, args=("has_taxable_brokerage",))
         with c3:
-            st.number_input(assumptions["annual_contribution"], min_value=0.0, step=1_000.0, key="annual_contribution")
-            st.number_input(assumptions["annual_retirement_spending"], min_value=0.0, step=5_000.0, key="annual_retirement_spending")
-            st.number_input(assumptions["annual_ss_benefit"], min_value=0.0, step=1_000.0, key="annual_social_security_benefit")
-            st.number_input(assumptions["annual_pension_income"], min_value=0.0, step=1_000.0, key="annual_pension_income")
-            st.number_input(assumptions["annual_other_income"], min_value=0.0, step=1_000.0, key="annual_other_income")
-            st.number_input(assumptions["annual_return"], min_value=0.0, max_value=0.20, step=0.005, format="%.3f", key="annual_return")
-            st.number_input(assumptions["state_tax_rate"], min_value=0.0, max_value=0.20, step=0.005, format="%.3f", key="state_tax_rate")
-            st.selectbox(assumptions["filing_status"], options=["mfj", "single"], key="filing_status")
-            st.number_input(assumptions["ss_claim_age"], min_value=62, max_value=75, key="social_security_claim_age")
+            st.number_input(assumptions["annual_contribution"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_contribution"), on_change=commit_shared_widget, args=("annual_contribution",))
+            st.number_input(assumptions["annual_retirement_spending"], min_value=0.0, step=5_000.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",))
+            st.number_input(assumptions["annual_ss_benefit"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_social_security_benefit"), on_change=commit_shared_widget, args=("annual_social_security_benefit",))
+            st.number_input(assumptions["annual_pension_income"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_pension_income"), on_change=commit_shared_widget, args=("annual_pension_income",))
+            st.number_input(assumptions["annual_other_income"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_other_income"), on_change=commit_shared_widget, args=("annual_other_income",))
+            st.number_input(assumptions["annual_return"], min_value=0.0, max_value=0.20, step=0.005, format="%.3f", key=shared_widget_key("annual_return"), on_change=commit_shared_widget, args=("annual_return",))
+            st.number_input(assumptions["state_tax_rate"], min_value=0.0, max_value=0.20, step=0.005, format="%.3f", key=shared_widget_key("state_tax_rate"), on_change=commit_shared_widget, args=("state_tax_rate",))
+            st.selectbox(assumptions["filing_status"], options=["mfj", "single"], key=shared_widget_key("filing_status"), on_change=commit_shared_widget, args=("filing_status",))
+            st.number_input(assumptions["ss_claim_age"], min_value=62, max_value=75, key=shared_widget_key("social_security_claim_age"), on_change=commit_shared_widget, args=("social_security_claim_age",))
 
     with st.sidebar:
         st.divider()

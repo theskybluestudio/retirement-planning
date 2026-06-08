@@ -82,16 +82,51 @@ ALL_DEFAULTS = SHARED_DEFAULTS | PAGE_DEFAULTS
 
 
 
+def _persist_key(key: str) -> str:
+    return f"_persist_{key}"
+
+
+def shared_widget_key(key: str) -> str:
+    return f"_widget_{key}"
+
+
+def prime_shared_widget(key: str) -> None:
+    st.session_state[shared_widget_key(key)] = st.session_state.get(key, ALL_DEFAULTS[key])
+
+
+def commit_shared_widget(key: str) -> None:
+    value = st.session_state[shared_widget_key(key)]
+    st.session_state[key] = value
+    st.session_state[_persist_key(key)] = value
+
+
+
+def _sync_persistent_defaults() -> None:
+    for key, default in ALL_DEFAULTS.items():
+        persist_key = _persist_key(key)
+        if key in st.session_state:
+            st.session_state[persist_key] = st.session_state[key]
+        elif persist_key in st.session_state:
+            st.session_state[key] = st.session_state[persist_key]
+        else:
+            st.session_state[key] = default
+            st.session_state[persist_key] = default
+
+
+
 def init_session_state() -> None:
     if not st.session_state.get("_initialized_defaults"):
         reset_assumptions()
         st.session_state._initialized_defaults = True
+    _sync_persistent_defaults()
 
 
 
 def reset_assumptions() -> None:
     for key, value in ALL_DEFAULTS.items():
         st.session_state[key] = value
+        st.session_state[_persist_key(key)] = value
+        st.session_state[shared_widget_key(key)] = value
 
 
 
@@ -99,6 +134,8 @@ def apply_preset(name: str) -> None:
     reset_assumptions()
     for key, value in SCENARIO_PRESETS.get(name, {}).items():
         st.session_state[key] = value
+        st.session_state[_persist_key(key)] = value
+        st.session_state[shared_widget_key(key)] = value
 
 
 
@@ -125,6 +162,8 @@ def import_assumptions(json_text: str) -> None:
             st.session_state[key] = float(incoming)
         else:
             st.session_state[key] = incoming
+        st.session_state[_persist_key(key)] = st.session_state[key]
+        st.session_state[shared_widget_key(key)] = st.session_state[key]
 
 
 

@@ -5,6 +5,7 @@ import pandas as pd
 import streamlit as st
 
 from app_i18n import section
+from app_state import commit_shared_widget, prime_shared_widget, shared_widget_key
 from app_ui import format_currency, render_explainer, render_header, render_note
 
 
@@ -29,8 +30,10 @@ def render_page() -> None:
     render_header(labels["title"], labels["subtitle"])
     render_explainer(common["about_tool"], labels["about_body"])
 
+    prime_shared_widget("social_security_fra_benefit")
+
     with st.expander(common["shared_inputs"], expanded=False):
-        st.number_input(labels["annual_ss_benefit_fra"], min_value=0.0, step=1_000.0, key="social_security_fra_benefit")
+        st.number_input(labels["annual_ss_benefit_fra"], min_value=0.0, step=1_000.0, key=shared_widget_key("social_security_fra_benefit"), on_change=commit_shared_widget, args=("social_security_fra_benefit",))
 
     with st.sidebar:
         st.divider()

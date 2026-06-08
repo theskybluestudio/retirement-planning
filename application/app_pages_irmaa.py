@@ -5,6 +5,7 @@ import pandas as pd
 import streamlit as st
 
 from app_i18n import section
+from app_state import commit_shared_widget, prime_shared_widget, shared_widget_key
 from app_ui import format_currency, render_explainer, render_header, render_note
 from roth_conversion_engine import IRMAA_2026
 
@@ -13,18 +14,22 @@ from roth_conversion_engine import IRMAA_2026
 def render_page() -> None:
     zh = st.session_state.get("language", "en") == "zh"
     common = section("common")
+    assumptions = section("assumptions")
     labels = section("irmaa")
     render_header(labels["title"], labels["subtitle"])
     render_explainer(common["about_tool"], labels["about_body"])
 
+    for key in ["filing_status", "annual_other_income", "annual_pension_income", "annual_social_security_benefit"]:
+        prime_shared_widget(key)
+
     with st.expander(common["shared_inputs"], expanded=False):
         c1, c2 = st.columns(2)
         with c1:
-            st.selectbox(labels["filing_status"], options=["mfj", "single"], key="filing_status")
-            st.number_input(labels["annual_other_income"], min_value=0.0, step=1_000.0, key="annual_other_income")
+            st.selectbox(assumptions["filing_status"], options=["mfj", "single"], key=shared_widget_key("filing_status"), on_change=commit_shared_widget, args=("filing_status",))
+            st.number_input(assumptions["annual_other_income"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_other_income"), on_change=commit_shared_widget, args=("annual_other_income",))
         with c2:
-            st.number_input(labels["annual_pension_income"], min_value=0.0, step=1_000.0, key="annual_pension_income")
-            st.number_input(labels["annual_ss_benefit"], min_value=0.0, step=1_000.0, key="annual_social_security_benefit")
+            st.number_input(assumptions["annual_pension_income"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_pension_income"), on_change=commit_shared_widget, args=("annual_pension_income",))
+            st.number_input(assumptions["annual_ss_benefit"], min_value=0.0, step=1_000.0, key=shared_widget_key("annual_social_security_benefit"), on_change=commit_shared_widget, args=("annual_social_security_benefit",))
 
     with st.sidebar:
         st.divider()

@@ -5,7 +5,7 @@ import pandas as pd
 import streamlit as st
 
 from app_i18n import section
-from app_state import get_total_portfolio
+from app_state import commit_shared_widget, get_total_portfolio, prime_shared_widget, shared_widget_key
 from app_ui import format_currency, render_explainer, render_header, render_note
 
 
@@ -51,14 +51,17 @@ def render_page() -> None:
     render_header(labels["title"], labels["subtitle"])
     render_explainer(common["about_tool"], labels["about_body"])
 
+    for key in ["traditional_balance", "roth_balance", "taxable_balance", "annual_retirement_spending"]:
+        prime_shared_widget(key)
+
     with st.expander(common["shared_inputs"], expanded=False):
         c1, c2 = st.columns(2)
         with c1:
-            st.number_input(assumptions["traditional_balance"], min_value=0.0, step=10_000.0, key="traditional_balance")
-            st.number_input(assumptions["roth_balance"], min_value=0.0, step=10_000.0, key="roth_balance")
-            st.number_input(assumptions["taxable_balance"], min_value=0.0, step=10_000.0, key="taxable_balance")
+            st.number_input(assumptions["traditional_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("traditional_balance"), on_change=commit_shared_widget, args=("traditional_balance",))
+            st.number_input(assumptions["roth_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("roth_balance"), on_change=commit_shared_widget, args=("roth_balance",))
+            st.number_input(assumptions["taxable_balance"], min_value=0.0, step=10_000.0, key=shared_widget_key("taxable_balance"), on_change=commit_shared_widget, args=("taxable_balance",))
         with c2:
-            st.number_input(assumptions["annual_retirement_spending"], min_value=0.0, step=5_000.0, key="annual_retirement_spending")
+            st.number_input(assumptions["annual_retirement_spending"], min_value=0.0, step=5_000.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",))
 
     with st.sidebar:
         st.divider()

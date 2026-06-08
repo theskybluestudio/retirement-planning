@@ -155,6 +155,7 @@ CATALOG: dict[str, Any] = {
     "social_security": {
         "title": {"en": "Social Security Optimizer", "zh": "社保优化器"},
         "subtitle": {"en": "Compare claiming ages, annual benefits, and simple lifetime payout tradeoffs.", "zh": "比较领取年龄、年度收益和简单的终身领取权衡。"},
+        "annual_ss_benefit_fra": {"en": "Annual Social Security benefit at FRA", "zh": "FRA 时年度社保收入"},
         "longevity_age": {"en": "Longevity age for comparison", "zh": "比较用寿命年龄"},
         "highlight_age": {"en": "Highlight claim age", "zh": "高亮领取年龄"},
         "best_age": {"en": "Best claim age", "zh": "最佳领取年龄"},
@@ -310,6 +311,7 @@ LEGACY_KEY_MAP = {
     "annual_retirement_spending": "assumptions.annual_retirement_spending",
     "annual_ss_benefit": "assumptions.annual_ss_benefit",
     "annual_ss_benefit_fra": "assumptions.annual_ss_benefit_fra",
+    "annual_social_security_benefit_fra": "assumptions.annual_ss_benefit_fra",
     "ss_claim_age": "assumptions.ss_claim_age",
     "annual_pension_income": "assumptions.annual_pension_income",
     "annual_other_income": "assumptions.annual_other_income",

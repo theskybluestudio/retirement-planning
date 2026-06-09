@@ -297,6 +297,11 @@ def annual_ss_benefit_for_age(inp: PlanInputs, age: int) -> float:
     return inp.annual_social_security_benefit
 
 
+def spending_need_for_age(inp: PlanInputs, age: int) -> float:
+    years_since_retirement = max(0, age - inp.retirement_age)
+    return inp.annual_retirement_spending * ((1 + inp.inflation) ** years_since_retirement)
+
+
 def choose_conversion(inp: PlanInputs, age: int, base_income: float, trad_balance: float) -> float:
     target_cap = gross_income_cap_for_target_bracket(inp.filing_status, inp.target_bracket)
 
@@ -346,7 +351,7 @@ def simulate_plan(inp: PlanInputs, do_conversions: bool = True, scenario_name: s
 
     for age in range(inp.retirement_age, 76):
         start_trad, start_roth, start_taxable = trad, roth, taxable
-        spending_need = inp.annual_retirement_spending
+        spending_need = spending_need_for_age(inp, age)
 
         ss_gross = annual_ss_benefit_for_age(inp, age)
         other_income = inp.annual_other_income
@@ -471,6 +476,7 @@ def project_post75_costs(
 
     for age in range(76, inp.life_expectancy + 1):
         factor = UNIFORM_LIFETIME_FACTORS.get(age, max(2.0, UNIFORM_LIFETIME_FACTORS[90] - (age - 90) * 0.7))
+        spending_need = spending_need_for_age(inp, age)
         ss_gross = annual_ss_benefit_for_age(inp, age)
         other_income = inp.annual_other_income
         pension_income = inp.annual_pension_income
@@ -489,7 +495,7 @@ def project_post75_costs(
         total_irmaa += irmaa
 
         trad -= rmd
-        leftover_rmd_after_spend = max(0.0, rmd - max(0.0, inp.annual_retirement_spending - (ss_gross + other_income + pension_income)))
+        leftover_rmd_after_spend = max(0.0, rmd - max(0.0, spending_need - (ss_gross + other_income + pension_income)))
         taxable_bal += max(0.0, leftover_rmd_after_spend - tax_bill)
 
         trad *= 1 + inp.annual_return
@@ -517,6 +523,7 @@ def project_post75_balances(
 
     for age in range(76, inp.life_expectancy + 1):
         factor = UNIFORM_LIFETIME_FACTORS.get(age, max(2.0, UNIFORM_LIFETIME_FACTORS[90] - (age - 90) * 0.7))
+        spending_need = spending_need_for_age(inp, age)
         ss_gross = annual_ss_benefit_for_age(inp, age)
         other_income = inp.annual_other_income
         pension_income = inp.annual_pension_income
@@ -532,7 +539,7 @@ def project_post75_balances(
         tax_bill = federal + state + irmaa
 
         trad -= rmd
-        leftover_rmd_after_spend = max(0.0, rmd - max(0.0, inp.annual_retirement_spending - (ss_gross + other_income + pension_income)))
+        leftover_rmd_after_spend = max(0.0, rmd - max(0.0, spending_need - (ss_gross + other_income + pension_income)))
         taxable_bal += max(0.0, leftover_rmd_after_spend - tax_bill)
 
         trad *= 1 + inp.annual_return
@@ -562,6 +569,7 @@ def project_late_life_metrics(
 
     for age in range(76, inp.life_expectancy + 1):
         factor = UNIFORM_LIFETIME_FACTORS.get(age, max(2.0, UNIFORM_LIFETIME_FACTORS[90] - (age - 90) * 0.7))
+        spending_need = spending_need_for_age(inp, age)
         ss_gross = annual_ss_benefit_for_age(inp, age)
         other_income = inp.annual_other_income
         pension_income = inp.annual_pension_income
@@ -579,7 +587,7 @@ def project_late_life_metrics(
         max_magi = max(max_magi, magi)
 
         trad -= rmd
-        leftover_rmd_after_spend = max(0.0, rmd - max(0.0, inp.annual_retirement_spending - (ss_gross + other_income + pension_income)))
+        leftover_rmd_after_spend = max(0.0, rmd - max(0.0, spending_need - (ss_gross + other_income + pension_income)))
         taxable_bal += max(0.0, leftover_rmd_after_spend - tax_bill)
 
         trad *= 1 + inp.annual_return

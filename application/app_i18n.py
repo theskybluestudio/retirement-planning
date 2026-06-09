@@ -61,10 +61,10 @@ CATALOG: dict[str, Any] = {
         "taxable_balance": {"en": "Taxable brokerage", "zh": "应税投资账户"},
         "has_roth_ira": {"en": "Already has Roth IRA", "zh": "已有 Roth IRA"},
         "has_taxable_brokerage": {"en": "Has taxable brokerage", "zh": "有应税投资账户"},
-        "annual_contribution": {"en": "Annual pre-retirement contribution", "zh": "退休前年度投入"},
+        "annual_contribution": {"en": "Annual pre-retirement contribution to IRA/401K", "zh": "退休前年度税前IRA/401K投入"},
         "annual_retirement_spending": {"en": "Annual retirement spending", "zh": "退休后年度支出"},
-        "annual_ss_benefit": {"en": "Annual Social Security benefit", "zh": "年度社保收入"},
-        "annual_ss_benefit_fra": {"en": "Annual Social Security benefit at FRA", "zh": "FRA 时年度社保收入"},
+        "annual_ss_benefit": {"en": "Annual Social Security benefit (planned actual)", "zh": "年度社保收入（按计划实际领取）"},
+        "annual_ss_benefit_fra": {"en": "Annual Social Security benefit at FRA (baseline)", "zh": "FRA 时年度社保收入（基准）"},
         "ss_claim_age": {"en": "Social Security claim age", "zh": "社保领取年龄"},
         "annual_pension_income": {"en": "Annual pension income", "zh": "年度养老金收入"},
         "annual_other_income": {"en": "Annual other ordinary income", "zh": "年度其他普通收入"},
@@ -75,12 +75,12 @@ CATALOG: dict[str, Any] = {
         "total_portfolio": {"en": "Total investable portfolio", "zh": "总投资资产"},
         "planned_spending": {"en": "Planned annual spending", "zh": "计划年度支出"},
         "about_body": {
-            "en": "**1) Concept**\n\nThis is the shared planning profile for the whole app. Retirement tools all depend on the same baseline facts: age, balances, spending, income, return assumptions, and tax assumptions.\n\n**2) What this tool is about**\n\nThis page is where you define those baseline facts once so the rest of the app can reuse them. It acts as the common foundation behind the other calculators.\n\n**3) How to use it**\n\nEnter your best estimates in the controls on the left first. Age, balances, spending, income, return assumptions, and tax assumptions all flow into the other tools, so better inputs here make every calculator more useful.",
-            "zh": "**1) 概念**\n\n这是整个应用共用的规划档案。所有退休工具都依赖同一套基础事实：年龄、账户余额、支出、收入、收益假设和税务假设。\n\n**2) 这个工具是做什么的**\n\n这个页面让你先定义这套基础事实，后面其他计算器都会复用它。它相当于整个应用的共同底座。\n\n**3) 如何使用**\n\n先在侧边栏输入你认为最接近现实的数字。年龄、余额、支出、收入、收益假设和税务假设都会流向其他工具，所以这里越准确，后面的计算器越有用。"
+            "en": "**1) Concept**\n\nThis is the shared planning profile for the whole app. Retirement tools all depend on the same baseline facts: age, balances, spending, income, return assumptions, and tax assumptions.\n\n**2) What this tool is about**\n\nThis page is where you define those baseline facts once so the rest of the app can reuse them. It acts as the common foundation behind the other calculators.\n\n**3) How to use it**\n\nEnter your best estimates in the controls below. Age, balances, spending, income, return assumptions, and tax assumptions all flow into the other tools, so better inputs here make every calculator more useful.",
+            "zh": "**1) 概念**\n\n这是整个应用共用的规划档案。所有退休工具都依赖同一套基础事实：年龄、账户余额、支出、收入、收益假设和税务假设。\n\n**2) 这个工具是做什么的**\n\n这个页面让你先定义这套基础事实，后面其他计算器都会复用它。它相当于整个应用的共同底座。\n\n**3) 如何使用**\n\n先在下面输入你认为最接近现实的数字。年龄、余额、支出、收入、收益假设和税务假设都会流向其他工具，所以这里越准确，后面的计算器越有用。"
         },
         "note": {
-            "en": "These values stay saved for this browser session. You can now apply scenario presets, reset everything to defaults, download the current assumptions to JSON, or load a saved JSON file back into the app.",
-            "zh": "这些值会保存在当前浏览器会话中。你现在可以应用情景预设、重置为默认值、下载当前假设为 JSON，或把已保存的 JSON 重新加载回应用。",
+            "en": "These values stay saved for this browser session. You can reset everything to defaults, download the current assumptions to JSON, or load a saved JSON file back into the app.",
+            "zh": "这些值会保存在当前浏览器会话中。你现在可以重置为默认值、下载当前假设为 JSON，或把已保存的 JSON 重新加载回应用。",
         },
     },
     "presets": {
@@ -121,16 +121,18 @@ CATALOG: dict[str, Any] = {
         "rmd_base": {"en": "RMD at 75 (no conversion)", "zh": "75 岁 RMD（不转换）"},
         "savings": {"en": "Estimated total savings", "zh": "预计总节省"},
         "trad75": {"en": "Traditional balance at 75", "zh": "75 岁传统账户余额"},
+        "total_roth_conversions": {"en": "Total Roth conversions", "zh": "Roth 转换总额"},
         "overview": {"en": "Overview", "zh": "概览"},
         "balance_path": {"en": "Balance path", "zh": "余额路径"},
         "annual_detail": {"en": "Annual detail", "zh": "年度明细"},
         "strategy_comparison": {"en": "Strategy comparison", "zh": "策略对比"},
+        "stage_summary": {"en": "Three-stage conversion summary", "zh": "三阶段转换摘要"},
         "rmd_age_75": {"en": "RMD at age 75", "zh": "75 岁 RMD"},
         "ladder_path": {"en": "Conversion ladder and balance path", "zh": "转换阶梯与余额路径"},
         "annual_path": {"en": "Annual conversion path", "zh": "年度转换路径"},
         "about_body": {
-            "en": "**1) Concept**\n\nRMDs are required minimum distributions — the IRS forces money out of traditional tax-deferred accounts later in retirement. That matters because RMDs can raise taxable income, push you into a higher bracket, and increase taxes on Social Security or Medicare premiums. Roth conversions can help reduce future RMDs by moving money into a tax-free bucket earlier.\n\n**2) What this tool is about**\n\nThis tool compares a conversion path with a no-conversion path. It is meant to show whether paying tax earlier through Roth conversions may reduce later RMD pressure and improve your long-term retirement outcome.\n\n**3) How to use it**\n\nUse the controls on the left to set the target bracket and any ACA/IRMAA toggles, then compare conversion vs. no-conversion paths. A higher target bracket usually means more aggressive conversions, while the ACA and IRMAA switches help show when extra income might create hidden costs. The page shows how much tax you may pay now, how RMDs may change later, and whether the conversion strategy improves the long-term picture for your retirement plan.",
-            "zh": "**1) 概念**\n\nRMD 是 required minimum distribution（最低强制提款）。到了后期，IRS 会要求你从传统递延税账户中取钱。它之所以重要，是因为 RMD 会抬高应税收入、可能把你推入更高税档，还可能影响社保税和 Medicare 保费。提前做 Roth 转换，可以把一部分钱移到免税账户，从而降低未来 RMD。\n\n**2) 这个工具是做什么的**\n\n这个工具比较“做转换”和“不做转换”两条路径。它的目的，是帮助你判断：通过更早做 Roth 转换提前交税，是否能降低未来 RMD 压力，并改善退休长期结果。\n\n**3) 如何使用**\n\n用左侧的控制项设定目标税档，以及是否考虑 ACA / IRMAA，再比较“做转换”和“不做转换”两条路径。目标税档越高，通常代表转换越激进；ACA 和 IRMAA 开关则帮助你看到额外收入可能带来的隐藏成本。这个页面会展示你现在可能多交多少税、未来 RMD 可能怎么变化，以及这个策略是否能改善退休长期结果。"
+            "en": "**1) Concept**\n\nRMDs are required minimum distributions — the IRS forces money out of traditional tax-deferred accounts later in retirement. That matters because RMDs can raise taxable income, push you into a higher bracket, and increase taxes on Social Security or Medicare premiums. Roth conversions can help reduce future RMDs by moving money into a tax-free bucket earlier.\n\n**2) What this tool is about**\n\nThis tool compares a conversion path with a no-conversion path. Its core strategy is to convert just enough each year from traditional accounts into Roth to fill up a chosen tax bracket ceiling, while also showing when ACA subsidy loss or IRMAA surcharges may make extra income more expensive. The goal is to show whether paying some tax earlier through Roth conversions may reduce later RMD pressure and improve your long-term retirement outcome.\n\n**3) How to use it**\n\nUse the controls on the left to set the target bracket and any ACA/IRMAA toggles, then compare conversion vs. no-conversion paths. A higher target bracket usually means more aggressive conversions, while the ACA and IRMAA switches help show when extra income might create hidden costs. The page shows how much tax you may pay now, how RMDs may change later, and whether the conversion strategy improves the long-term picture for your retirement plan.",
+            "zh": "**1) 概念**\n\nRMD 是 required minimum distribution（最低强制提款）。到了后期，IRS 会要求你从传统递延税账户中取钱。它之所以重要，是因为 RMD 会抬高应税收入、可能把你推入更高税档，还可能影响社保税和 Medicare 保费。提前做 Roth 转换，可以把一部分钱移到免税账户，从而降低未来 RMD。\n\n**2) 这个工具是做什么的**\n\n这个工具比较“做转换”和“不做转换”两条路径。它的核心策略是：每年从传统账户向 Roth 转换刚好足以填满你设定的目标税档上限，同时提示 ACA 补贴损失或 IRMAA 附加费何时会让额外收入变得更贵。它的目的，是帮助你判断：通过更早做 Roth 转换提前交税，是否能降低未来 RMD 压力，并改善退休长期结果。\n\n**3) 如何使用**\n\n用左侧的控制项设定目标税档，以及是否考虑 ACA / IRMAA，再比较“做转换”和“不做转换”两条路径。目标税档越高，通常代表转换越激进；ACA 和 IRMAA 开关则帮助你看到额外收入可能带来的隐藏成本。这个页面会展示你现在可能多交多少税、未来 RMD 可能怎么变化，以及这个策略是否能改善退休长期结果。"
         },
         "caption": {"en": "Planning approximation only. Verify actual tax execution with CPA or tax software.", "zh": "仅供规划近似使用。实际执行前请用 CPA 或报税软件复核。"},
     },
@@ -155,7 +157,7 @@ CATALOG: dict[str, Any] = {
     "social_security": {
         "title": {"en": "Social Security Optimizer", "zh": "社保优化器"},
         "subtitle": {"en": "Compare claiming ages, annual benefits, and simple lifetime payout tradeoffs.", "zh": "比较领取年龄、年度收益和简单的终身领取权衡。"},
-        "annual_ss_benefit_fra": {"en": "Annual Social Security benefit at FRA", "zh": "FRA 时年度社保收入"},
+        "annual_ss_benefit_fra": {"en": "Annual Social Security benefit at FRA (baseline)", "zh": "FRA 时年度社保收入（基准）"},
         "longevity_age": {"en": "Longevity age for comparison", "zh": "比较用寿命年龄"},
         "highlight_age": {"en": "Highlight claim age", "zh": "高亮领取年龄"},
         "best_age": {"en": "Best claim age", "zh": "最佳领取年龄"},

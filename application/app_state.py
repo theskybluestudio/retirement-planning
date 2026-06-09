@@ -5,15 +5,17 @@ import json
 
 import streamlit as st
 
+from app_ui import money_input, percent_input
+
 
 SHARED_DEFAULTS = {
-    "current_age": 45,
-    "retirement_age": 65,
+    "current_age": 50,
+    "retirement_age": 60,
     "life_expectancy": 90,
     "filing_status": "mfj",
-    "traditional_balance": 1_200_000.0,
-    "roth_balance": 300_000.0,
-    "taxable_balance": 400_000.0,
+    "traditional_balance": 1_000_000.0,
+    "roth_balance": 500_000.0,
+    "taxable_balance": 500_000.0,
     "annual_contribution": 30_000.0,
     "annual_return": 0.06,
     "inflation": 0.025,
@@ -26,6 +28,19 @@ SHARED_DEFAULTS = {
     "has_roth_ira": True,
     "has_taxable_brokerage": True,
     "social_security_fra_benefit": 36_000.0,
+}
+
+
+CLAIMING_FACTORS = {
+    62: 0.70,
+    63: 0.75,
+    64: 0.80,
+    65: 0.8667,
+    66: 0.9333,
+    67: 1.00,
+    68: 1.08,
+    69: 1.16,
+    70: 1.24,
 }
 
 
@@ -50,34 +65,6 @@ PAGE_DEFAULTS = {
 }
 
 
-SCENARIO_PRESETS = {
-    "Base": {},
-    "Conservative": {
-        "annual_return": 0.045,
-        "inflation": 0.03,
-        "annual_retirement_spending": 130_000.0,
-        "readiness_withdrawal_rate": 0.035,
-        "rmd_target_bracket": "22%",
-    },
-    "Aggressive": {
-        "annual_return": 0.075,
-        "inflation": 0.022,
-        "annual_retirement_spending": 115_000.0,
-        "readiness_withdrawal_rate": 0.045,
-        "rmd_target_bracket": "24%",
-    },
-    "Early Retirement": {
-        "retirement_age": 58,
-        "life_expectancy": 95,
-        "annual_contribution": 40_000.0,
-        "annual_retirement_spending": 110_000.0,
-        "social_security_claim_age": 70,
-        "ss_longevity_age": 95,
-        "readiness_withdrawal_rate": 0.038,
-    },
-}
-
-
 ALL_DEFAULTS = SHARED_DEFAULTS | PAGE_DEFAULTS
 
 
@@ -94,10 +81,33 @@ def prime_shared_widget(key: str) -> None:
     st.session_state[shared_widget_key(key)] = st.session_state.get(key, ALL_DEFAULTS[key])
 
 
+def estimate_annual_social_security_benefit(fra_benefit: float, claim_age: int) -> float:
+    factor = CLAIMING_FACTORS.get(int(claim_age))
+    if factor is None:
+        if claim_age < 62:
+            factor = CLAIMING_FACTORS[62]
+        elif claim_age > 70:
+            factor = CLAIMING_FACTORS[70]
+        else:
+            factor = CLAIMING_FACTORS[67]
+    return max(0.0, float(fra_benefit) * float(factor))
+
+
+def sync_estimated_social_security_benefit() -> None:
+    fra_benefit = float(st.session_state.get("social_security_fra_benefit", SHARED_DEFAULTS["social_security_fra_benefit"]))
+    claim_age = int(st.session_state.get("social_security_claim_age", SHARED_DEFAULTS["social_security_claim_age"]))
+    estimated = estimate_annual_social_security_benefit(fra_benefit, claim_age)
+    st.session_state["annual_social_security_benefit"] = estimated
+    st.session_state[_persist_key("annual_social_security_benefit")] = estimated
+    st.session_state[shared_widget_key("annual_social_security_benefit")] = estimated
+
+
 def commit_shared_widget(key: str) -> None:
     value = st.session_state[shared_widget_key(key)]
     st.session_state[key] = value
     st.session_state[_persist_key(key)] = value
+    if key in {"social_security_fra_benefit", "social_security_claim_age"}:
+        sync_estimated_social_security_benefit()
 
 
 
@@ -119,6 +129,7 @@ def init_session_state() -> None:
         reset_assumptions()
         st.session_state._initialized_defaults = True
     _sync_persistent_defaults()
+    sync_estimated_social_security_benefit()
 
 
 
@@ -127,15 +138,7 @@ def reset_assumptions() -> None:
         st.session_state[key] = value
         st.session_state[_persist_key(key)] = value
         st.session_state[shared_widget_key(key)] = value
-
-
-
-def apply_preset(name: str) -> None:
-    reset_assumptions()
-    for key, value in SCENARIO_PRESETS.get(name, {}).items():
-        st.session_state[key] = value
-        st.session_state[_persist_key(key)] = value
-        st.session_state[shared_widget_key(key)] = value
+    sync_estimated_social_security_benefit()
 
 
 
@@ -164,6 +167,49 @@ def import_assumptions(json_text: str) -> None:
             st.session_state[key] = incoming
         st.session_state[_persist_key(key)] = st.session_state[key]
         st.session_state[shared_widget_key(key)] = st.session_state[key]
+    sync_estimated_social_security_benefit()
+
+
+
+def render_shared_assumptions_panel(common_labels: dict, assumptions_labels: dict, *, expanded: bool = False) -> None:
+    shared_keys = [
+        "current_age", "retirement_age", "life_expectancy", "filing_status",
+        "traditional_balance", "roth_balance", "taxable_balance",
+        "annual_contribution", "annual_retirement_spending", "annual_social_security_benefit", "social_security_fra_benefit",
+        "social_security_claim_age", "annual_pension_income", "annual_other_income", "annual_return", "inflation", "state_tax_rate",
+    ]
+    for key in shared_keys:
+        prime_shared_widget(key)
+
+    with st.expander(common_labels["shared_inputs"], expanded=expanded):
+        left, right = st.columns(2)
+        with left:
+            st.subheader(assumptions_labels["personal"])
+            st.number_input(assumptions_labels["current_age"], min_value=18, max_value=80, key=shared_widget_key("current_age"), on_change=commit_shared_widget, args=("current_age",))
+            st.number_input(assumptions_labels["retirement_age"], min_value=25, max_value=80, key=shared_widget_key("retirement_age"), on_change=commit_shared_widget, args=("retirement_age",))
+            st.number_input(assumptions_labels["life_expectancy"], min_value=70, max_value=105, key=shared_widget_key("life_expectancy"), on_change=commit_shared_widget, args=("life_expectancy",))
+            st.selectbox(assumptions_labels["filing_status"], options=["mfj", "single"], key=shared_widget_key("filing_status"), on_change=commit_shared_widget, args=("filing_status",))
+
+            st.subheader(assumptions_labels["accounts"])
+            money_input(assumptions_labels["traditional_balance"], min_value=0.0, key=shared_widget_key("traditional_balance"), on_change=commit_shared_widget, args=("traditional_balance",))
+            money_input(assumptions_labels["roth_balance"], min_value=0.0, key=shared_widget_key("roth_balance"), on_change=commit_shared_widget, args=("roth_balance",))
+            money_input(assumptions_labels["taxable_balance"], min_value=0.0, key=shared_widget_key("taxable_balance"), on_change=commit_shared_widget, args=("taxable_balance",))
+
+        with right:
+            st.subheader(assumptions_labels["cash_flow"])
+            money_input(assumptions_labels["annual_contribution"], min_value=0.0, key=shared_widget_key("annual_contribution"), on_change=commit_shared_widget, args=("annual_contribution",))
+            money_input(assumptions_labels["annual_retirement_spending"], min_value=0.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",))
+            money_input(assumptions_labels["annual_ss_benefit_fra"], min_value=0.0, key=shared_widget_key("social_security_fra_benefit"), on_change=commit_shared_widget, args=("social_security_fra_benefit",))
+            st.number_input(assumptions_labels["ss_claim_age"], min_value=62, max_value=75, key=shared_widget_key("social_security_claim_age"), on_change=commit_shared_widget, args=("social_security_claim_age",))
+            sync_estimated_social_security_benefit()
+            st.text_input(assumptions_labels["annual_ss_benefit"], value=f"{st.session_state.annual_social_security_benefit:,.0f}", disabled=True)
+            money_input(assumptions_labels["annual_pension_income"], min_value=0.0, key=shared_widget_key("annual_pension_income"), on_change=commit_shared_widget, args=("annual_pension_income",))
+            money_input(assumptions_labels["annual_other_income"], min_value=0.0, key=shared_widget_key("annual_other_income"), on_change=commit_shared_widget, args=("annual_other_income",))
+
+            st.subheader(assumptions_labels["market_tax"])
+            percent_input(assumptions_labels["annual_return"], min_value=0.0, max_value=0.20, key=shared_widget_key("annual_return"), on_change=commit_shared_widget, args=("annual_return",))
+            percent_input(assumptions_labels["inflation"], min_value=0.0, max_value=0.10, key=shared_widget_key("inflation"), on_change=commit_shared_widget, args=("inflation",))
+            percent_input(assumptions_labels["state_tax_rate"], min_value=0.0, max_value=0.20, key=shared_widget_key("state_tax_rate"), on_change=commit_shared_widget, args=("state_tax_rate",))
 
 
 
@@ -191,11 +237,6 @@ def validate_assumptions() -> tuple[list[str], list[str]]:
         warnings.append("年化收益率小于或等于通胀率；长期实际增长可能偏弱。" if zh else "Annual return is less than or equal to inflation; long-term real growth may be weak.")
     if float(st.session_state.annual_retirement_spending) > get_fixed_retirement_income() + get_total_portfolio() * 0.06:
         warnings.append("计划退休支出相对当前资产和固定收入看起来偏高。" if zh else "Planned retirement spending looks high relative to current assets and fixed income.")
-    if float(st.session_state.taxable_balance) == 0 and bool(st.session_state.has_taxable_brokerage):
-        warnings.append("已勾选应税投资账户，但应税余额为 0。" if zh else "Taxable brokerage is checked, but the taxable balance is zero.")
-    if float(st.session_state.roth_balance) == 0 and bool(st.session_state.has_roth_ira):
-        warnings.append("已勾选 Roth IRA，但 Roth 余额为 0。" if zh else "Roth IRA is checked, but the Roth balance is zero.")
-
     return errors, warnings
 
 

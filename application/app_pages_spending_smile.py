@@ -5,8 +5,8 @@ import pandas as pd
 import streamlit as st
 
 from app_i18n import section
-from app_state import commit_shared_widget, prime_shared_widget, shared_widget_key
-from app_ui import format_currency, format_dataframe, money_input, render_explainer, render_header, render_note
+from app_state import render_shared_assumptions_panel
+from app_ui import format_currency, format_dataframe, render_explainer, render_header, render_note
 
 
 
@@ -18,15 +18,7 @@ def render_page() -> None:
     render_header(labels["title"], labels["subtitle"])
     render_explainer(common["about_tool"], labels["about_body"])
 
-    for key in ["retirement_age", "annual_retirement_spending"]:
-        prime_shared_widget(key)
-
-    with st.expander(common["shared_inputs"], expanded=False):
-        c1, c2 = st.columns(2)
-        with c1:
-            st.number_input(assumptions["retirement_age"], min_value=25, max_value=80, key=shared_widget_key("retirement_age"), on_change=commit_shared_widget, args=("retirement_age",))
-        with c2:
-            money_input(assumptions["annual_retirement_spending"], min_value=0.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",))
+    render_shared_assumptions_panel(common, assumptions)
 
     with st.sidebar:
         st.divider()

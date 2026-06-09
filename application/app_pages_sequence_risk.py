@@ -5,8 +5,8 @@ import pandas as pd
 import streamlit as st
 
 from app_i18n import section
-from app_state import commit_shared_widget, get_total_portfolio, prime_shared_widget, shared_widget_key
-from app_ui import format_currency, format_dataframe, money_input, render_explainer, render_header, render_note
+from app_state import get_total_portfolio, render_shared_assumptions_panel
+from app_ui import format_currency, format_dataframe, render_explainer, render_header, render_note
 
 
 
@@ -37,17 +37,7 @@ def render_page() -> None:
     render_header(labels["title"], labels["subtitle"])
     render_explainer(common["about_tool"], labels["about_body"])
 
-    for key in ["traditional_balance", "roth_balance", "taxable_balance", "annual_retirement_spending"]:
-        prime_shared_widget(key)
-
-    with st.expander(common["shared_inputs"], expanded=False):
-        c1, c2 = st.columns(2)
-        with c1:
-            money_input(assumptions["traditional_balance"], min_value=0.0, key=shared_widget_key("traditional_balance"), on_change=commit_shared_widget, args=("traditional_balance",))
-            money_input(assumptions["roth_balance"], min_value=0.0, key=shared_widget_key("roth_balance"), on_change=commit_shared_widget, args=("roth_balance",))
-            money_input(assumptions["taxable_balance"], min_value=0.0, key=shared_widget_key("taxable_balance"), on_change=commit_shared_widget, args=("taxable_balance",))
-        with c2:
-            money_input(assumptions["annual_retirement_spending"], min_value=0.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",))
+    render_shared_assumptions_panel(common, assumptions)
 
     start_balance = get_total_portfolio()
     annual_withdrawal = float(st.session_state.annual_retirement_spending)

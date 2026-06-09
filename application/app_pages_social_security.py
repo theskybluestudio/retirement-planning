@@ -5,8 +5,8 @@ import pandas as pd
 import streamlit as st
 
 from app_i18n import section
-from app_state import commit_shared_widget, prime_shared_widget, shared_widget_key
-from app_ui import format_currency, format_dataframe, money_input, render_explainer, render_header, render_note
+from app_state import render_shared_assumptions_panel
+from app_ui import format_currency, format_dataframe, render_explainer, render_header, render_note
 
 
 CLAIMING_FACTORS = {
@@ -26,14 +26,12 @@ CLAIMING_FACTORS = {
 def render_page() -> None:
     zh = st.session_state.get("language", "en") == "zh"
     common = section("common")
+    assumptions = section("assumptions")
     labels = section("social_security")
     render_header(labels["title"], labels["subtitle"])
     render_explainer(common["about_tool"], labels["about_body"])
 
-    prime_shared_widget("social_security_fra_benefit")
-
-    with st.expander(common["shared_inputs"], expanded=False):
-        money_input(labels["annual_ss_benefit_fra"], min_value=0.0, key=shared_widget_key("social_security_fra_benefit"), on_change=commit_shared_widget, args=("social_security_fra_benefit",))
+    render_shared_assumptions_panel(common, assumptions)
 
     with st.sidebar:
         st.divider()

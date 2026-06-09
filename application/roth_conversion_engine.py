@@ -504,6 +504,98 @@ def project_post75_costs(
     }
 
 
+def project_post75_balances(
+    traditional: float,
+    roth: float,
+    taxable: float,
+    inp: PlanInputs,
+    prior_year_magi: Dict[int, float],
+) -> Dict[str, float]:
+    trad = traditional
+    roth_bal = roth
+    taxable_bal = taxable
+
+    for age in range(76, inp.life_expectancy + 1):
+        factor = UNIFORM_LIFETIME_FACTORS.get(age, max(2.0, UNIFORM_LIFETIME_FACTORS[90] - (age - 90) * 0.7))
+        ss_gross = annual_ss_benefit_for_age(inp, age)
+        other_income = inp.annual_other_income
+        pension_income = inp.annual_pension_income
+        ss_taxable = taxable_ss(ss_gross, other_income + pension_income, inp.filing_status)
+        rmd = min(trad, trad / factor) if trad > 0 else 0.0
+        ordinary_income = other_income + pension_income + ss_taxable + rmd
+        federal = federal_tax(ordinary_income, inp.filing_status)
+        state = ordinary_income * inp.state_tax_rate
+        magi = other_income + pension_income + ss_gross + rmd
+        irmaa = irmaa_surcharge(prior_year_magi.get(age - 2, 0.0), inp.filing_status) if inp.use_irmaa_model and age >= 65 else 0.0
+        prior_year_magi[age] = magi
+
+        tax_bill = federal + state + irmaa
+
+        trad -= rmd
+        leftover_rmd_after_spend = max(0.0, rmd - max(0.0, inp.annual_retirement_spending - (ss_gross + other_income + pension_income)))
+        taxable_bal += max(0.0, leftover_rmd_after_spend - tax_bill)
+
+        trad *= 1 + inp.annual_return
+        roth_bal *= 1 + inp.annual_return
+        taxable_bal *= 1 + inp.annual_return
+
+    return {
+        "traditional": trad,
+        "roth": roth_bal,
+        "taxable": taxable_bal,
+        "total": trad + roth_bal + taxable_bal,
+    }
+
+
+def project_late_life_metrics(
+    traditional: float,
+    roth: float,
+    taxable: float,
+    inp: PlanInputs,
+    prior_year_magi: Dict[int, float],
+) -> Dict[str, float]:
+    trad = traditional
+    roth_bal = roth
+    taxable_bal = taxable
+    max_rmd = 0.0
+    max_magi = 0.0
+
+    for age in range(76, inp.life_expectancy + 1):
+        factor = UNIFORM_LIFETIME_FACTORS.get(age, max(2.0, UNIFORM_LIFETIME_FACTORS[90] - (age - 90) * 0.7))
+        ss_gross = annual_ss_benefit_for_age(inp, age)
+        other_income = inp.annual_other_income
+        pension_income = inp.annual_pension_income
+        ss_taxable = taxable_ss(ss_gross, other_income + pension_income, inp.filing_status)
+        rmd = min(trad, trad / factor) if trad > 0 else 0.0
+        ordinary_income = other_income + pension_income + ss_taxable + rmd
+        federal = federal_tax(ordinary_income, inp.filing_status)
+        state = ordinary_income * inp.state_tax_rate
+        magi = other_income + pension_income + ss_gross + rmd
+        irmaa = irmaa_surcharge(prior_year_magi.get(age - 2, 0.0), inp.filing_status) if inp.use_irmaa_model and age >= 65 else 0.0
+        prior_year_magi[age] = magi
+
+        tax_bill = federal + state + irmaa
+        max_rmd = max(max_rmd, rmd)
+        max_magi = max(max_magi, magi)
+
+        trad -= rmd
+        leftover_rmd_after_spend = max(0.0, rmd - max(0.0, inp.annual_retirement_spending - (ss_gross + other_income + pension_income)))
+        taxable_bal += max(0.0, leftover_rmd_after_spend - tax_bill)
+
+        trad *= 1 + inp.annual_return
+        roth_bal *= 1 + inp.annual_return
+        taxable_bal *= 1 + inp.annual_return
+
+    return {
+        "traditional": trad,
+        "roth": roth_bal,
+        "taxable": taxable_bal,
+        "total": trad + roth_bal + taxable_bal,
+        "max_rmd": max_rmd,
+        "max_magi": max_magi,
+    }
+
+
 def compare_strategies(inp: PlanInputs) -> Dict[str, PlanResult]:
     conversion = simulate_plan(inp, do_conversions=True, scenario_name="conversion")
     baseline = simulate_plan(inp, do_conversions=False, scenario_name="no_conversion")

@@ -5,6 +5,7 @@ import json
 
 import streamlit as st
 
+from app_i18n import tooltip
 from app_ui import money_input, percent_input
 
 
@@ -14,7 +15,7 @@ SHARED_DEFAULTS = {
     "life_expectancy": 90,
     "filing_status": "mfj",
     "traditional_balance": 1_000_000.0,
-    "roth_balance": 500_000.0,
+    "roth_balance": 250_000.0,
     "taxable_balance": 500_000.0,
     "annual_contribution": 30_000.0,
     "annual_return": 0.06,
@@ -185,31 +186,31 @@ def render_shared_assumptions_panel(common_labels: dict, assumptions_labels: dic
         left, right = st.columns(2)
         with left:
             st.subheader(assumptions_labels["personal"])
-            st.number_input(assumptions_labels["current_age"], min_value=18, max_value=80, key=shared_widget_key("current_age"), on_change=commit_shared_widget, args=("current_age",))
-            st.number_input(assumptions_labels["retirement_age"], min_value=25, max_value=80, key=shared_widget_key("retirement_age"), on_change=commit_shared_widget, args=("retirement_age",))
-            st.number_input(assumptions_labels["life_expectancy"], min_value=70, max_value=105, key=shared_widget_key("life_expectancy"), on_change=commit_shared_widget, args=("life_expectancy",))
-            st.selectbox(assumptions_labels["filing_status"], options=["mfj", "single"], key=shared_widget_key("filing_status"), on_change=commit_shared_widget, args=("filing_status",))
+            st.number_input(assumptions_labels["current_age"], min_value=18, max_value=80, key=shared_widget_key("current_age"), on_change=commit_shared_widget, args=("current_age",), help=tooltip("assumptions", "current_age"))
+            st.number_input(assumptions_labels["retirement_age"], min_value=25, max_value=80, key=shared_widget_key("retirement_age"), on_change=commit_shared_widget, args=("retirement_age",), help=tooltip("assumptions", "retirement_age"))
+            st.number_input(assumptions_labels["life_expectancy"], min_value=70, max_value=105, key=shared_widget_key("life_expectancy"), on_change=commit_shared_widget, args=("life_expectancy",), help=tooltip("assumptions", "life_expectancy"))
+            st.selectbox(assumptions_labels["filing_status"], options=["mfj", "single"], key=shared_widget_key("filing_status"), on_change=commit_shared_widget, args=("filing_status",), help=tooltip("assumptions", "filing_status"))
 
             st.subheader(assumptions_labels["accounts"])
-            money_input(assumptions_labels["traditional_balance"], min_value=0.0, key=shared_widget_key("traditional_balance"), on_change=commit_shared_widget, args=("traditional_balance",))
-            money_input(assumptions_labels["roth_balance"], min_value=0.0, key=shared_widget_key("roth_balance"), on_change=commit_shared_widget, args=("roth_balance",))
-            money_input(assumptions_labels["taxable_balance"], min_value=0.0, key=shared_widget_key("taxable_balance"), on_change=commit_shared_widget, args=("taxable_balance",))
+            money_input(assumptions_labels["traditional_balance"], min_value=0.0, key=shared_widget_key("traditional_balance"), on_change=commit_shared_widget, args=("traditional_balance",), help=tooltip("assumptions", "traditional_balance"))
+            money_input(assumptions_labels["roth_balance"], min_value=0.0, key=shared_widget_key("roth_balance"), on_change=commit_shared_widget, args=("roth_balance",), help=tooltip("assumptions", "roth_balance"))
+            money_input(assumptions_labels["taxable_balance"], min_value=0.0, key=shared_widget_key("taxable_balance"), on_change=commit_shared_widget, args=("taxable_balance",), help=tooltip("assumptions", "taxable_balance"))
 
         with right:
             st.subheader(assumptions_labels["cash_flow"])
-            money_input(assumptions_labels["annual_contribution"], min_value=0.0, key=shared_widget_key("annual_contribution"), on_change=commit_shared_widget, args=("annual_contribution",))
-            money_input(assumptions_labels["annual_retirement_spending"], min_value=0.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",))
-            money_input(assumptions_labels["annual_ss_benefit_fra"], min_value=0.0, key=shared_widget_key("social_security_fra_benefit"), on_change=commit_shared_widget, args=("social_security_fra_benefit",))
-            st.number_input(assumptions_labels["ss_claim_age"], min_value=62, max_value=75, key=shared_widget_key("social_security_claim_age"), on_change=commit_shared_widget, args=("social_security_claim_age",))
+            money_input(assumptions_labels["annual_contribution"], min_value=0.0, key=shared_widget_key("annual_contribution"), on_change=commit_shared_widget, args=("annual_contribution",), help=tooltip("assumptions", "annual_contribution"))
+            money_input(assumptions_labels["annual_retirement_spending"], min_value=0.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",), help=tooltip("assumptions", "annual_retirement_spending"))
+            money_input(assumptions_labels["annual_ss_benefit_fra"], min_value=0.0, key=shared_widget_key("social_security_fra_benefit"), on_change=commit_shared_widget, args=("social_security_fra_benefit",), help=tooltip("assumptions", "annual_ss_benefit_fra"))
+            st.number_input(assumptions_labels["ss_claim_age"], min_value=62, max_value=75, key=shared_widget_key("social_security_claim_age"), on_change=commit_shared_widget, args=("social_security_claim_age",), help=tooltip("assumptions", "ss_claim_age"))
             sync_estimated_social_security_benefit()
-            st.text_input(assumptions_labels["annual_ss_benefit"], value=f"{st.session_state.annual_social_security_benefit:,.0f}", disabled=True)
-            money_input(assumptions_labels["annual_pension_income"], min_value=0.0, key=shared_widget_key("annual_pension_income"), on_change=commit_shared_widget, args=("annual_pension_income",))
-            money_input(assumptions_labels["annual_other_income"], min_value=0.0, key=shared_widget_key("annual_other_income"), on_change=commit_shared_widget, args=("annual_other_income",))
+            st.text_input(assumptions_labels["annual_ss_benefit"], value=f"{st.session_state.annual_social_security_benefit:,.0f}", disabled=True, help=tooltip("assumptions", "annual_ss_benefit"))
+            money_input(assumptions_labels["annual_pension_income"], min_value=0.0, key=shared_widget_key("annual_pension_income"), on_change=commit_shared_widget, args=("annual_pension_income",), help=tooltip("assumptions", "annual_pension_income"))
+            money_input(assumptions_labels["annual_other_income"], min_value=0.0, key=shared_widget_key("annual_other_income"), on_change=commit_shared_widget, args=("annual_other_income",), help=tooltip("assumptions", "annual_other_income"))
 
             st.subheader(assumptions_labels["market_tax"])
-            percent_input(assumptions_labels["annual_return"], min_value=0.0, max_value=0.20, key=shared_widget_key("annual_return"), on_change=commit_shared_widget, args=("annual_return",))
-            percent_input(assumptions_labels["inflation"], min_value=0.0, max_value=0.10, key=shared_widget_key("inflation"), on_change=commit_shared_widget, args=("inflation",))
-            percent_input(assumptions_labels["state_tax_rate"], min_value=0.0, max_value=0.20, key=shared_widget_key("state_tax_rate"), on_change=commit_shared_widget, args=("state_tax_rate",))
+            percent_input(assumptions_labels["annual_return"], min_value=0.0, max_value=0.20, key=shared_widget_key("annual_return"), on_change=commit_shared_widget, args=("annual_return",), help=tooltip("assumptions", "annual_return"))
+            percent_input(assumptions_labels["inflation"], min_value=0.0, max_value=0.10, key=shared_widget_key("inflation"), on_change=commit_shared_widget, args=("inflation",), help=tooltip("assumptions", "inflation"))
+            percent_input(assumptions_labels["state_tax_rate"], min_value=0.0, max_value=0.20, key=shared_widget_key("state_tax_rate"), on_change=commit_shared_widget, args=("state_tax_rate",), help=tooltip("assumptions", "state_tax_rate"))
 
 
 

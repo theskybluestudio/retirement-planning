@@ -58,7 +58,7 @@ def render_page() -> None:
     render_note(
         f"Both paths use the same return set. The only difference is order. In this case, bad early returns leave the portfolio with {format_currency(end_late - end_early)} less by year 10."
         if not zh
-        else f"两条路径使用相同的收益集合，唯一差别是顺序。在这个例子中，坏收益先发生会让投资组合到第 10 年时少 {format_currency(end_late - end_early)}。"
+        else f"两条路径使用相同的收益集合，唯一差别是顺序。在这个例子中，前期先出现差回报会让投资组合到第 10 年时少 {format_currency(end_late - end_early)}。"
     )
     st.caption(
         f"Using shared assumptions: total investable portfolio {format_currency(start_balance)} and annual retirement spending {format_currency(annual_withdrawal)} as the withdrawal level."

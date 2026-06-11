@@ -150,6 +150,7 @@ class PlanInputs:
 @dataclass
 class YearResult:
     age: int
+    filing_status: str
     start_traditional: float
     start_roth: float
     start_taxable: float
@@ -163,14 +164,24 @@ class YearResult:
     pension_income: float
     recommended_conversion: float
     gross_income: float
+    magi: float
+    rmd: float
+    ltcg: float
+    dividends: float
     estimated_federal_tax: float
     estimated_state_tax: float
+    ltcg_tax: float
+    niit_tax: float
+    total_tax: float
+    tax_paid_from_taxable: float
+    tax_paid_from_roth: float
     aca_subsidy_loss: float
     irmaa_surcharge: float
     effective_marginal_bracket: str
     end_traditional: float
     end_roth: float
     end_taxable: float
+    total_assets: float
 
 
 @dataclass
@@ -375,6 +386,11 @@ def simulate_plan(inp: PlanInputs, do_conversions: bool = True, scenario_name: s
         federal = federal_tax(gross_income, inp.filing_status)
         state = gross_income * inp.state_tax_rate
         magi = other_income + pension_income + ss_gross + spending_from_traditional + conversion
+        rmd = 0.0
+        ltcg = 0.0
+        dividends = 0.0
+        ltcg_tax = 0.0
+        niit_tax = 0.0
 
         aca_drag = estimate_aca_drag(magi, inp.filing_status) if inp.use_aca_model and age < 65 else 0.0
         irmaa = irmaa_surcharge(prior_year_magi.get(age - 2, 0.0), inp.filing_status) if inp.use_irmaa_model and age >= 65 else 0.0
@@ -386,6 +402,8 @@ def simulate_plan(inp: PlanInputs, do_conversions: bool = True, scenario_name: s
         total_irmaa += irmaa
 
         tax_bill = federal + state + aca_drag + irmaa
+        tax_from_taxable = 0.0
+        tax_from_roth = 0.0
         if inp.has_taxable_brokerage:
             tax_from_taxable = min(tax_bill, taxable)
             taxable -= tax_from_taxable
@@ -395,7 +413,10 @@ def simulate_plan(inp: PlanInputs, do_conversions: bool = True, scenario_name: s
             trad -= tax_from_trad
             tax_bill -= tax_from_trad
         if tax_bill > 0:
-            roth -= min(tax_bill, roth)
+            tax_from_roth = min(tax_bill, roth)
+            roth -= tax_from_roth
+
+        total_tax = federal + state + ltcg_tax + niit_tax + aca_drag + irmaa
 
         trad *= 1 + inp.annual_return
         roth *= 1 + inp.annual_return
@@ -404,6 +425,7 @@ def simulate_plan(inp: PlanInputs, do_conversions: bool = True, scenario_name: s
         yearly.append(
             YearResult(
                 age=age,
+                filing_status=inp.filing_status,
                 start_traditional=start_trad,
                 start_roth=start_roth,
                 start_taxable=start_taxable,
@@ -417,14 +439,24 @@ def simulate_plan(inp: PlanInputs, do_conversions: bool = True, scenario_name: s
                 pension_income=pension_income,
                 recommended_conversion=conversion,
                 gross_income=gross_income,
+                magi=magi,
+                rmd=rmd,
+                ltcg=ltcg,
+                dividends=dividends,
                 estimated_federal_tax=federal,
                 estimated_state_tax=state,
+                ltcg_tax=ltcg_tax,
+                niit_tax=niit_tax,
+                total_tax=total_tax,
+                tax_paid_from_taxable=tax_from_taxable,
+                tax_paid_from_roth=tax_from_roth,
                 aca_subsidy_loss=aca_drag,
                 irmaa_surcharge=irmaa,
                 effective_marginal_bracket=marginal_bracket(gross_income, inp.filing_status),
                 end_traditional=trad,
                 end_roth=roth,
                 end_taxable=taxable,
+                total_assets=trad + roth + taxable,
             )
         )
 
@@ -607,9 +639,15 @@ def project_late_life_metrics(
 def compare_strategies(inp: PlanInputs) -> Dict[str, PlanResult]:
     conversion = simulate_plan(inp, do_conversions=True, scenario_name="conversion")
     baseline = simulate_plan(inp, do_conversions=False, scenario_name="no_conversion")
+    bracket_fill = simulate_plan(
+        PlanInputs(**{**asdict(inp), "use_aca_model": False, "use_irmaa_model": False}),
+        do_conversions=True,
+        scenario_name="bracket_fill_only",
+    )
     return {
         "conversion": conversion,
         "no_conversion": baseline,
+        "bracket_fill_only": bracket_fill,
     }
 
 

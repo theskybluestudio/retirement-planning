@@ -4,7 +4,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from app_i18n import section
+from app_i18n import section, tooltip
 from app_state import render_shared_assumptions_panel
 from app_ui import format_currency, format_dataframe, money_input, render_explainer, render_header, render_note
 from roth_conversion_engine import IRMAA_2026
@@ -24,7 +24,7 @@ def render_page() -> None:
     with st.sidebar:
         st.divider()
         st.header(common["page_specific_inputs"])
-        extra_income = money_input(labels["extra_income"], min_value=0.0, value=25_000.0, key="irmaa_extra_income")
+        extra_income = money_input(labels["extra_income"], min_value=0.0, value=25_000.0, key="irmaa_extra_income", help=tooltip("irmaa", "extra_income"))
 
     filing_status = str(st.session_state.filing_status)
     base_magi = (

@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import streamlit as st
 
-from app_i18n import section
+from app_i18n import section, tooltip
 from app_state import render_shared_assumptions_panel
 from app_ui import format_currency, format_percent, money_input, render_explainer, render_header, render_note
 
@@ -40,7 +40,7 @@ def render_page() -> None:
     with st.sidebar:
         st.divider()
         st.header(common["page_specific_inputs"])
-        target_portfolio = money_input(labels["target_portfolio"], min_value=0.0, key="save_target_portfolio")
+        target_portfolio = money_input(labels["target_portfolio"], min_value=0.0, key="save_target_portfolio", help=tooltip("savings_rate", "target_portfolio"))
 
     current_age = int(st.session_state.current_age)
     retirement_age = int(st.session_state.retirement_age)

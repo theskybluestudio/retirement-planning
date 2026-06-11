@@ -4,7 +4,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from app_i18n import section
+from app_i18n import section, tooltip
 from app_state import render_shared_assumptions_panel
 from app_ui import format_currency, format_dataframe, render_explainer, render_header, render_note
 
@@ -36,7 +36,7 @@ def render_page() -> None:
     with st.sidebar:
         st.divider()
         st.header(common["page_specific_inputs"])
-        longevity_age = st.number_input(labels["longevity_age"], min_value=70, max_value=100, key="ss_longevity_age")
+        longevity_age = st.number_input(labels["longevity_age"], min_value=70, max_value=100, key="ss_longevity_age", help=tooltip("social_security", "longevity_age"))
         selected_claim_age = st.slider(labels["highlight_age"], min_value=62, max_value=70, value=67, key="ss_selected_claim_age")
 
     fra_annual_benefit = float(st.session_state.social_security_fra_benefit)

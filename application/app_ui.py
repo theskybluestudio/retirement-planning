@@ -119,6 +119,7 @@ def money_input(
     key: str,
     min_value: float = 0.0,
     value: float | None = None,
+    help: str | None = None,
     on_change=None,
     args: tuple = (),
 ) -> float:
@@ -136,7 +137,7 @@ def money_input(
         if on_change is not None:
             on_change(*args)
 
-    st.text_input(label, key=text_key, on_change=_handle_change)
+    st.text_input(label, key=text_key, on_change=_handle_change, help=help)
     return float(st.session_state.get(key, numeric_value))
 
 
@@ -147,6 +148,7 @@ def percent_input(
     min_value: float = 0.0,
     max_value: float | None = None,
     value: float | None = None,
+    help: str | None = None,
     on_change=None,
     args: tuple = (),
 ) -> float:
@@ -167,7 +169,7 @@ def percent_input(
         if on_change is not None:
             on_change(*args)
 
-    st.text_input(label, key=text_key, on_change=_handle_change)
+    st.text_input(label, key=text_key, on_change=_handle_change, help=help)
     return float(st.session_state.get(key, numeric_value))
 
 

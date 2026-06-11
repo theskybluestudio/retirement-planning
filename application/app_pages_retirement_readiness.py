@@ -4,7 +4,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from app_i18n import section
+from app_i18n import section, tooltip
 from app_state import get_total_portfolio, render_shared_assumptions_panel
 from app_ui import format_currency, format_dataframe, format_percent, percent_input, render_explainer, render_header, render_note
 
@@ -23,7 +23,7 @@ def render_page() -> None:
     with st.sidebar:
         st.divider()
         st.header(common["page_specific_inputs"])
-        withdrawal_rate = percent_input(labels["withdrawal_rate"], min_value=0.01, max_value=0.10, key="readiness_withdrawal_rate")
+        withdrawal_rate = percent_input(labels["withdrawal_rate"], min_value=0.01, max_value=0.10, key="readiness_withdrawal_rate", help=tooltip("readiness", "withdrawal_rate"))
 
     current_age = int(st.session_state.current_age)
     retirement_age = int(st.session_state.retirement_age)

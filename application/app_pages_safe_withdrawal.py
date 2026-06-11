@@ -4,7 +4,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from app_i18n import section
+from app_i18n import section, tooltip
 from app_state import get_total_portfolio, render_shared_assumptions_panel
 from app_ui import format_currency, format_dataframe, format_percent, percent_input, render_explainer, render_header, render_note
 
@@ -56,8 +56,8 @@ def render_page() -> None:
     with st.sidebar:
         st.divider()
         st.header(common["page_specific_inputs"])
-        floor_rate = percent_input(labels["lower_guardrail"], min_value=0.01, max_value=0.10, key="guard_floor_rate")
-        ceiling_rate = percent_input(labels["upper_guardrail"], min_value=0.02, max_value=0.15, key="guard_ceiling_rate")
+        floor_rate = percent_input(labels["lower_guardrail"], min_value=0.01, max_value=0.10, key="guard_floor_rate", help=tooltip("safe_withdrawal", "lower_guardrail"))
+        ceiling_rate = percent_input(labels["upper_guardrail"], min_value=0.02, max_value=0.15, key="guard_ceiling_rate", help=tooltip("safe_withdrawal", "upper_guardrail"))
 
     start_balance = get_total_portfolio()
     initial_withdrawal = float(st.session_state.annual_retirement_spending)

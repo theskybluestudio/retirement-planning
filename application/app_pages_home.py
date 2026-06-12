@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import streamlit as st
 
-from app_i18n import section, t
+from app_i18n import section
 from app_ui import render_header, render_note
 
 
@@ -12,6 +12,7 @@ TOOLS = {
         "Getting started": [
             ("Home", "A quick tour of the app and how it fits together."),
             ("Shared Assumptions", "Set the common retirement facts once and let the other pages reuse them."),
+            ("Feedback", "Open the GitHub project and share bugs, ideas, or suggestions."),
         ],
         "Basic tools": [
             ("Retirement Readiness", "Estimate whether projected savings and income cover retirement spending."),
@@ -31,6 +32,7 @@ TOOLS = {
         "从这里开始": [
             ("首页", "快速了解这个应用，以及它怎么配合使用。"),
             ("共享假设", "一次设置通用退休信息，并让其他页面复用。"),
+            ("反馈", "打开 GitHub 项目并提交 bug、想法或建议。"),
         ],
         "基础工具": [
             ("退休准备度", "估算预计储蓄和收入是否足以覆盖退休支出。"),
@@ -77,16 +79,3 @@ def render_page() -> None:
         )
         render_note(home_labels["note"])
 
-    st.subheader(home_labels["current_structure"])
-    if lang == "en":
-        st.markdown(
-            f"- **{nav_labels['getting_started']}** — Home, Shared Assumptions\n"
-            f"- **{nav_labels['basic_tools']}** — Retirement Readiness, Social Security Optimizer, Savings Rate / Catch-Up, Spending Smile Planner\n"
-            f"- **{nav_labels['advanced_tools']}** — RMD / Roth Conversion Strategy, Medicare IRMAA, Sequence Risk Visualizer, Safe Withdrawal Guardrails, Withdrawal Order"
-        )
-    else:
-        st.markdown(
-            f"- **{nav_labels['getting_started']}** — 首页、共享假设\n"
-            f"- **{nav_labels['basic_tools']}** — 退休准备度、社保优化器、储蓄率 / 追赶储蓄、支出微笑曲线\n"
-            f"- **{nav_labels['advanced_tools']}** — RMD / Roth 转换策略、Medicare IRMAA、收益顺序风险可视化、安全提款护栏、提款顺序"
-        )

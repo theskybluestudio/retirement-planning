@@ -12,6 +12,11 @@ LANGUAGES = {
     "zh": "中文",
 }
 
+LANGUAGE_LABELS = {
+    "🇺🇸 English": "en",
+    "🇨🇳 中文": "zh",
+}
+
 
 CATALOG: dict[str, Any] = {
     "common": {
@@ -130,6 +135,23 @@ CATALOG: dict[str, Any] = {
         "income_withdrawals": {"en": "Income & withdrawals", "zh": "收入与提款"},
         "reference": {"en": "Reference", "zh": "参考"},
         "roadmap": {"en": "Roadmap", "zh": "路线图"},
+    },
+    "feedback": {
+        "title": {"en": "Feedback", "zh": "反馈"},
+        "subtitle": {
+            "en": "Share bugs, ideas, and suggestions for improving the retirement planning app.",
+            "zh": "欢迎分享 bug、想法和建议，帮助改进这个退休规划应用。",
+        },
+        "body": {
+            "en": "If something is confusing, missing, or broken, GitHub is the best place to leave feedback. You can browse the source, open an issue, or follow ongoing changes there.",
+            "zh": "如果你发现哪里不清楚、缺失或有问题，GitHub 是最合适的反馈入口。你可以在那里查看源码、提交 issue，或跟进正在进行的改动。",
+        },
+        "note": {
+            "en": "Please include the page name, what you expected, and what actually happened when reporting a bug.",
+            "zh": "报告 bug 时，最好附上页面名称、你的预期结果，以及实际发生了什么。",
+        },
+        "repo_link": {"en": "GitHub repository", "zh": "GitHub 仓库"},
+        "issues_link": {"en": "Open or view issues", "zh": "查看或提交 issue"},
     },
     "rmd": {
         "title": {"en": "RMD / Roth Conversion Strategy", "zh": "RMD / Roth 转换策略"},
@@ -409,7 +431,8 @@ def _resolve_node(path: str) -> dict[str, str] | None:
 def init_i18n() -> None:
     if "language" not in st.session_state:
         st.session_state.language = "en"
-    st.session_state.language_selector = st.session_state.language
+    reverse_labels = {code: label for label, code in LANGUAGE_LABELS.items()}
+    st.session_state.language_selector = reverse_labels.get(st.session_state.language, "🇺🇸 English")
 
 
 
@@ -447,17 +470,21 @@ def tooltip(prefix: str, key: str) -> str | None:
 
 def render_language_switch() -> None:
     def _persist_language() -> None:
-        st.session_state.language = st.session_state.language_selector
+        st.session_state.language = LANGUAGE_LABELS[st.session_state.language_selector]
         st_cookie.update("language")
 
+    reverse_labels = {code: label for label, code in LANGUAGE_LABELS.items()}
     current = st.session_state.get("language", "en")
+    current_label = reverse_labels.get(current, "🇺🇸 English")
+    if st.session_state.get("language_selector") not in LANGUAGE_LABELS:
+        st.session_state.language_selector = current_label
+
     st.sidebar.radio(
         t("common.language"),
-        options=list(LANGUAGES.keys()),
-        index=list(LANGUAGES.keys()).index(current),
-        format_func=lambda code: "🇺🇸 English" if code == "en" else "🇨🇳 中文",
+        options=list(LANGUAGE_LABELS.keys()),
+        index=list(LANGUAGE_LABELS.keys()).index(current_label),
         key="language_selector",
         horizontal=True,
         on_change=_persist_language,
     )
-    st.session_state.language = st.session_state.language_selector
+    st.session_state.language = LANGUAGE_LABELS[st.session_state.language_selector]

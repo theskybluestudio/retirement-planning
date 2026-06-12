@@ -5,6 +5,7 @@ import streamlit as st
 
 from app_i18n import section
 from app_pages_assumptions import render_page as render_assumptions
+from app_pages_feedback import render_page as render_feedback
 from app_pages_home import render_page as render_home
 from app_pages_irmaa import render_page as render_irmaa
 from app_pages_retirement_readiness import render_page as render_readiness
@@ -22,6 +23,7 @@ def build_navigation() -> dict[str, list[st.Page]]:
     lang = st.session_state.get("language", "en")
     navigation = section("navigation")
     assumptions = section("assumptions")
+    feedback = section("feedback")
     rmd = section("rmd")
     readiness = section("readiness")
     social_security = section("social_security")
@@ -34,6 +36,7 @@ def build_navigation() -> dict[str, list[st.Page]]:
 
     home_page = st.Page(render_home, title="Home" if lang == "en" else "首页", url_path="home", default=True)
     assumptions_page = st.Page(render_assumptions, title=assumptions["title"], url_path="shared-assumptions")
+    feedback_page = st.Page(render_feedback, title=feedback["title"], url_path="feedback")
     basic_tools = [
         st.Page(render_readiness, title=readiness["title"], url_path="retirement-readiness"),
         st.Page(render_social_security, title=social_security["title"], url_path="social-security-optimizer"),
@@ -49,7 +52,7 @@ def build_navigation() -> dict[str, list[st.Page]]:
     ]
 
     return {
-        navigation["getting_started"]: [home_page, assumptions_page],
+        navigation["getting_started"]: [home_page, assumptions_page, feedback_page],
         navigation["basic_tools"]: basic_tools,
         navigation["advanced_tools"]: advanced_tools,
     }

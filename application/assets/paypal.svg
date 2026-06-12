@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="PayPal">
+  <defs>
+    <linearGradient id="ppg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#003087"/>
+      <stop offset="100%" stop-color="#009cde"/>
+    </linearGradient>
+  </defs>
+  <rect x="6" y="6" width="52" height="52" rx="14" fill="url(#ppg)"/>
+  <path d="M25 18h11.5c7.2 0 11.9 4 11.1 10.1-.9 7-6 10.4-13 10.4h-4.3L28 49H20l4.7-31zm8.1 14.1c3.7 0 6.1-1.5 6.5-4.6.4-2.8-1.6-4.4-5.1-4.4h-2.8l-1.4 9h2.8z" fill="#fff"/>
+  <path d="M18 23h8.5c3.4 0 5.8 1 7 2.8-1-.2-2.1-.3-3.3-.3H25L20.3 56H12l6-33z" fill="#7fd3ff" opacity="0.9"/>
+</svg>

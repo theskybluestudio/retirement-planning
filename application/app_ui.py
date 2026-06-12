@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+from pathlib import Path
+import base64
+
 import streamlit as st
 
 
 ACCENT = "#0f766e"
+ASSETS_DIR = Path(__file__).parent / "assets"
 
 
 PAGE_GROUPS = {
@@ -60,6 +64,29 @@ def inject_css() -> None:
             color: rgba(250,250,250,0.70);
             font-size: 0.92rem;
         }}
+        .mesh-link-button {{
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            padding: 0.7rem 1rem;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #0070ba, #003087);
+            color: white !important;
+            text-decoration: none !important;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.10);
+            box-shadow: 0 6px 18px rgba(0,48,135,0.22);
+            margin: 0.35rem 0 0.5rem 0;
+        }}
+        .mesh-link-button:hover {{
+            filter: brightness(1.05);
+            text-decoration: none !important;
+        }}
+        .mesh-link-button img {{
+            width: 20px;
+            height: 20px;
+            display: block;
+        }}
         </style>
         """,
         unsafe_allow_html=True,
@@ -82,6 +109,16 @@ def render_header(title: str, subtitle: str) -> None:
 
 def render_note(text: str) -> None:
     st.markdown(f'<div class="mesh-note">{text}</div>', unsafe_allow_html=True)
+
+
+
+def render_icon_link_button(label: str, url: str, icon_path: str, *, css_class: str = "mesh-link-button") -> None:
+    icon_bytes = Path(icon_path).read_bytes()
+    icon_b64 = base64.b64encode(icon_bytes).decode("ascii")
+    st.markdown(
+        f'<a class="{css_class}" href="{url}" target="_blank" rel="noopener noreferrer"><img src="data:image/svg+xml;base64,{icon_b64}" alt="">{label}</a>',
+        unsafe_allow_html=True,
+    )
 
 
 

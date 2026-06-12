@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 import streamlit as st
@@ -15,6 +16,11 @@ LANGUAGES = {
 LANGUAGE_LABELS = {
     "🇺🇸 English": "en",
     "🇨🇳 中文": "zh",
+}
+
+FLAG_ASSETS = {
+    "en": Path(__file__).parent / "assets" / "flag-us.svg",
+    "zh": Path(__file__).parent / "assets" / "flag-cn.svg",
 }
 
 
@@ -146,12 +152,19 @@ CATALOG: dict[str, Any] = {
             "en": "If something is confusing, missing, or broken, GitHub is the best place to leave feedback. You can browse the source, open an issue, or follow ongoing changes there.",
             "zh": "如果你发现哪里不清楚、缺失或有问题，GitHub 是最合适的反馈入口。你可以在那里查看源码、提交 issue，或跟进正在进行的改动。",
         },
+        "github_section": {"en": "Feedback and questions via GitHub", "zh": "通过 GitHub 提交反馈与问题"},
         "note": {
             "en": "Please include the page name, what you expected, and what actually happened when reporting a bug.",
             "zh": "报告 bug 时，最好附上页面名称、你的预期结果，以及实际发生了什么。",
         },
+        "support_section": {"en": "Support this tool", "zh": "支持这个工具"},
+        "support_body": {
+            "en": "If this tool helps you plan more clearly, avoid mistakes, or make better retirement decisions, your support helps keep it running, improving, and available to others. Thank you for your kind support.",
+            "zh": "如果这个工具能帮助你更清晰地规划、避免失误，或做出更好的退休决策，你的支持将帮助它持续运行、不断改进，并让更多人受益。感谢你的支持与鼓励。",
+        },
         "repo_link": {"en": "GitHub repository", "zh": "GitHub 仓库"},
         "issues_link": {"en": "Open or view issues", "zh": "查看或提交 issue"},
+        "paypal_link": {"en": "Support via PayPal", "zh": "通过 PayPal 支持"},
     },
     "rmd": {
         "title": {"en": "RMD / Roth Conversion Strategy", "zh": "RMD / Roth 转换策略"},
@@ -432,7 +445,8 @@ def init_i18n() -> None:
     if "language" not in st.session_state:
         st.session_state.language = "en"
     reverse_labels = {code: label for label, code in LANGUAGE_LABELS.items()}
-    st.session_state.language_selector = reverse_labels.get(st.session_state.language, "🇺🇸 English")
+    if "language_selector" not in st.session_state:
+        st.session_state.language_selector = reverse_labels.get(st.session_state.language, "🇺🇸 English")
 
 
 
@@ -470,8 +484,10 @@ def tooltip(prefix: str, key: str) -> str | None:
 
 def render_language_switch() -> None:
     def _persist_language() -> None:
-        st.session_state.language = LANGUAGE_LABELS[st.session_state.language_selector]
-        st_cookie.update("language")
+        selected = st.session_state.get("language_selector")
+        if selected in LANGUAGE_LABELS:
+            st.session_state.language = LANGUAGE_LABELS[selected]
+            st_cookie.update("language")
 
     reverse_labels = {code: label for label, code in LANGUAGE_LABELS.items()}
     current = st.session_state.get("language", "en")
@@ -479,12 +495,16 @@ def render_language_switch() -> None:
     if st.session_state.get("language_selector") not in LANGUAGE_LABELS:
         st.session_state.language_selector = current_label
 
-    st.sidebar.radio(
+    selected = st.sidebar.pills(
         t("common.language"),
         options=list(LANGUAGE_LABELS.keys()),
-        index=list(LANGUAGE_LABELS.keys()).index(current_label),
         key="language_selector",
-        horizontal=True,
+        default=st.session_state.language_selector,
         on_change=_persist_language,
+        selection_mode="single",
     )
-    st.session_state.language = LANGUAGE_LABELS[st.session_state.language_selector]
+    if selected in LANGUAGE_LABELS:
+        st.session_state.language = LANGUAGE_LABELS[selected]
+    else:
+        st.session_state.language_selector = current_label
+        st.session_state.language = current

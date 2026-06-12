@@ -4,6 +4,7 @@ from __future__ import annotations
 from typing import Any
 
 import streamlit as st
+import st_cookie
 
 
 LANGUAGES = {
@@ -407,7 +408,8 @@ def _resolve_node(path: str) -> dict[str, str] | None:
 
 def init_i18n() -> None:
     if "language" not in st.session_state:
-        st.session_state.language = "zh"
+        st.session_state.language = "en"
+    st.session_state.language_selector = st.session_state.language
 
 
 
@@ -444,13 +446,18 @@ def tooltip(prefix: str, key: str) -> str | None:
 
 
 def render_language_switch() -> None:
+    def _persist_language() -> None:
+        st.session_state.language = st.session_state.language_selector
+        st_cookie.update("language")
+
     current = st.session_state.get("language", "en")
-    choice = st.sidebar.radio(
+    st.sidebar.radio(
         t("common.language"),
         options=list(LANGUAGES.keys()),
         index=list(LANGUAGES.keys()).index(current),
         format_func=lambda code: "🇺🇸 English" if code == "en" else "🇨🇳 中文",
         key="language_selector",
         horizontal=True,
+        on_change=_persist_language,
     )
-    st.session_state.language = choice
+    st.session_state.language = st.session_state.language_selector

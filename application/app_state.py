@@ -63,6 +63,15 @@ PAGE_DEFAULTS = {
     "smile_no_go_multiplier": 0.80,
     "smile_healthcare_step_up": 15_000.0,
     "save_target_portfolio": 2_500_000.0,
+    "mega_tax_year": 2026,
+    "mega_compensation": 200_000.0,
+    "mega_employee_deferrals": 30_000.0,
+    "mega_employer_contributions": 0.0,
+    "mega_after_tax_already": 0.0,
+    "mega_catch_up_limit": 8_000.0,
+    "mega_plan_after_tax_cap": 0.0,
+    "mega_allows_after_tax": True,
+    "mega_allows_conversion": True,
 }
 
 

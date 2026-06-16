@@ -14,6 +14,7 @@ A Streamlit-based retirement planning workspace for exploring common retirement 
 - Withdrawal Order
 - Spending Smile Planner
 - Savings Rate / Catch-Up
+- Mega Backdoor Roth
 
 ## Stack
 

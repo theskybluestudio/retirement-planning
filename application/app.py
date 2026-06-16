@@ -8,6 +8,7 @@ from app_pages_assumptions import render_page as render_assumptions
 from app_pages_feedback import render_page as render_feedback
 from app_pages_home import render_page as render_home
 from app_pages_irmaa import render_page as render_irmaa
+from app_pages_mega_backdoor_roth import render_page as render_mega_backdoor_roth
 from app_pages_retirement_readiness import render_page as render_readiness
 from app_pages_rmd_strategy import render_page as render_rmd_strategy
 from app_pages_safe_withdrawal import render_page as render_safe_withdrawal
@@ -28,6 +29,7 @@ def build_navigation() -> dict[str, list[st.Page]]:
     readiness = section("readiness")
     social_security = section("social_security")
     irmaa = section("irmaa")
+    mega_backdoor = section("mega_backdoor")
     sequence = section("sequence")
     safe_withdrawal = section("safe_withdrawal")
     withdrawal_order = section("withdrawal_order")
@@ -42,6 +44,7 @@ def build_navigation() -> dict[str, list[st.Page]]:
         st.Page(render_social_security, title=social_security["title"], url_path="social-security-optimizer"),
         st.Page(render_savings_rate, title=savings_rate["title"], url_path="savings-rate-catch-up"),
         st.Page(render_spending_smile, title=spending_smile["title"], url_path="spending-smile-planner"),
+        st.Page(render_mega_backdoor_roth, title=mega_backdoor["title"], url_path="mega-backdoor-roth"),
     ]
     advanced_tools = [
         st.Page(render_rmd_strategy, title=rmd["title"], url_path="rmd-roth-conversion-strategy"),

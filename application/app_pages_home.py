@@ -19,6 +19,7 @@ TOOLS = {
             ("Social Security Optimizer", "Compare claiming ages and lifetime benefits with break-even views."),
             ("Savings Rate / Catch-Up", "Estimate how much more to save if you start later or want to retire earlier."),
             ("Spending Smile Planner", "Model spending across go-go, slow-go, and no-go retirement phases."),
+            ("Mega Backdoor Roth", "Estimate current-year after-tax 401(k) room available for Mega Backdoor Roth contributions."),
         ],
         "Advanced tools": [
             ("RMD / Roth Conversion Strategy", "Compare conversion vs no-conversion paths and estimate future RMD impact."),
@@ -39,6 +40,7 @@ TOOLS = {
             ("社保优化器", "比较不同领取年龄、终身收益和盈亏平衡情况。"),
             ("储蓄率 / 追赶储蓄", "估算晚起步或想提前退休时需要增加多少储蓄。"),
             ("支出微笑曲线", "按 go-go、slow-go、no-go 阶段建模退休支出。"),
+            ("Mega Backdoor Roth", "估算本年度还能进行多少税后 401(k) 供款并转入 Mega Backdoor Roth。"),
         ],
         "进阶工具": [
             ("RMD / Roth 转换策略", "比较转换与不转换路径，并估算未来 RMD 影响。"),
@@ -78,4 +80,3 @@ def render_page() -> None:
             f"{home_labels['step_4']}"
         )
         render_note(home_labels["note"])
-

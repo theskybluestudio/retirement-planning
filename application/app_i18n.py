@@ -550,7 +550,6 @@ def render_language_switch() -> None:
         t("common.language"),
         options=list(LANGUAGE_LABELS.keys()),
         key="language_selector",
-        default=st.session_state.language_selector,
         on_change=_persist_language,
         selection_mode="single",
     )

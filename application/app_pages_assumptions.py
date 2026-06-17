@@ -28,7 +28,7 @@ def render_page() -> None:
 
     action_col, download_col = st.columns([1.0, 1.4])
     with action_col:
-        if st.button(labels["reset_defaults"], use_container_width=True):
+        if st.button(labels["reset_defaults"], width="stretch"):
             reset_assumptions()
             st.rerun()
     with download_col:
@@ -38,7 +38,7 @@ def render_page() -> None:
             data=export_assumptions(),
             file_name=f"retirement-assumptions-{timestamp}.json",
             mime="application/json",
-            use_container_width=True,
+            width="stretch",
         )
 
     uploaded = st.file_uploader(labels["load_json"], type=["json"])

@@ -142,7 +142,7 @@ def render_page() -> None:
     left, right = st.columns([1.2, 1.0])
     with left:
         st.subheader(labels["calculation_breakdown"])
-        st.dataframe(format_dataframe(detail, currency_columns=["amount"]), use_container_width=True, hide_index=True)
+        st.dataframe(format_dataframe(detail, currency_columns=["amount"]), width="stretch", hide_index=True)
     with right:
         st.subheader(labels["quick_checks"])
         st.write(f"{labels['catch_up_used']}: **{format_currency(catch_up_used)}**")

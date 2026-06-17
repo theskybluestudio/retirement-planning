@@ -95,5 +95,5 @@ def render_page() -> None:
             st.write(f"Fixed income sources contribute **{format_currency(fixed_income)}** per year.")
 
     st.subheader(labels["table"])
-    st.dataframe(format_dataframe(projection_df.reset_index(), currency_columns=["nominal_balance", "real_balance"]), use_container_width=True)
+    st.dataframe(format_dataframe(projection_df.reset_index(), currency_columns=["nominal_balance", "real_balance"]), width="stretch")
     st.caption(labels["caption"])

@@ -92,7 +92,7 @@ def render_page() -> None:
     )
 
     st.subheader(labels["strategy_comparison"])
-    st.dataframe(format_dataframe(df, currency_columns=["estimated_tax", "unfunded_need", "ending_taxable", "ending_traditional", "ending_roth"]), use_container_width=True)
+    st.dataframe(format_dataframe(df, currency_columns=["estimated_tax", "unfunded_need", "ending_taxable", "ending_traditional", "ending_roth"]), width="stretch")
 
     tax_chart = df.set_index("strategy")[["estimated_tax"]]
     balance_chart = df.set_index("strategy")[["ending_taxable", "ending_traditional", "ending_roth"]]

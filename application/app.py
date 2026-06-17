@@ -67,7 +67,7 @@ def render_sidebar_navigation(nav_sections: dict[str, list[st.Page]]) -> None:
             if section_label:
                 st.markdown(f"**{section_label}**")
             for page in pages:
-                st.page_link(page, label=page.title, use_container_width=True)
+                st.page_link(page, label=page.title, width="stretch")
             st.write("")
 
 

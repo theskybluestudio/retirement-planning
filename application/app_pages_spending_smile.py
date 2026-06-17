@@ -83,5 +83,5 @@ def render_page() -> None:
         st.bar_chart(phase_summary)
 
     st.subheader(labels["detailed_schedule"])
-    st.dataframe(format_dataframe(df, currency_columns=["annual_spending"]), use_container_width=True)
+    st.dataframe(format_dataframe(df, currency_columns=["annual_spending"]), width="stretch")
     st.caption(labels["caption"])

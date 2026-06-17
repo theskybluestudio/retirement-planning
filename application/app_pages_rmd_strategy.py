@@ -152,7 +152,7 @@ def render_page() -> None:
             with st.container(border=True):
                 st.button(
                     _strategy_banner_label(key, zh),
-                    use_container_width=True,
+                    width="stretch",
                     type="primary" if current_selected == key else "secondary",
                     key=f"rmd_strategy_banner_{key}",
                     on_click=_set_selected_strategy,
@@ -252,7 +252,7 @@ def render_page() -> None:
                 currency_columns=["转换总额" if zh else "Total conversion", "年均转换" if zh else "Avg annual conversion"],
                 integer_columns=["年数" if zh else "Years"],
             ),
-            use_container_width=True,
+            width="stretch",
             hide_index=True,
         )
 
@@ -298,7 +298,7 @@ def render_page() -> None:
                 comparison_transposed_display.loc[row_label] = comparison_transposed_display.loc[row_label].map(format_currency)
         st.dataframe(
             comparison_transposed_display.style.apply(_bold_recommended_column, axis=0, recommended_label=scenario_labels[recommended_key]),
-            use_container_width=True,
+            width="stretch",
             hide_index=False,
         )
 
@@ -402,7 +402,7 @@ def render_page() -> None:
                     "ACA拖累" if zh else "ACA drag",
                 ],
             ),
-            use_container_width=True,
+            width="stretch",
         )
 
         st.download_button(

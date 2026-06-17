@@ -110,5 +110,5 @@ def render_page() -> None:
 
     detail = fixed_df.merge(guard_df, on="year", suffixes=("_fixed", "_guardrails"))
     st.subheader(labels["scenario_detail"])
-    st.dataframe(format_dataframe(detail, currency_columns=["start_balance_fixed", "withdrawal_fixed", "end_balance_fixed", "start_balance_guardrails", "withdrawal_guardrails", "end_balance_guardrails"]), use_container_width=True)
+    st.dataframe(format_dataframe(detail, currency_columns=["start_balance_fixed", "withdrawal_fixed", "end_balance_fixed", "start_balance_guardrails", "withdrawal_guardrails", "end_balance_guardrails"]), width="stretch")
     st.caption(labels["caption"])

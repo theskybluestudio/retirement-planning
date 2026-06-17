@@ -94,5 +94,5 @@ def render_page() -> None:
         st.write(f"Years collected: **{int(selected_row['years_collected'])}**" if not zh else f"领取年数：**{int(selected_row['years_collected'])}**")
 
     st.subheader(labels["comparison"])
-    st.dataframe(format_dataframe(df, currency_columns=["annual_benefit", "lifetime_benefit"], integer_columns=["claim_age", "years_collected"]), use_container_width=True)
+    st.dataframe(format_dataframe(df, currency_columns=["annual_benefit", "lifetime_benefit"], integer_columns=["claim_age", "years_collected"]), width="stretch")
     st.caption(labels["caption"])

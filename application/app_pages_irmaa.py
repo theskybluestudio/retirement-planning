@@ -78,7 +78,7 @@ def render_page() -> None:
     chart_col, detail_col = st.columns([1.2, 1.0])
     with chart_col:
         st.subheader(labels["thresholds"])
-        st.dataframe(format_dataframe(table, currency_columns=["magi_threshold", "annual_irmaa_surcharge"]), use_container_width=True)
+        st.dataframe(format_dataframe(table, currency_columns=["magi_threshold", "annual_irmaa_surcharge"]), width="stretch")
     with detail_col:
         st.subheader(labels["quick_read"])
         if extra_income > 0:

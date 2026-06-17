@@ -87,6 +87,6 @@ def render_page() -> None:
             "bad_late_end_balance": late_df["end_balance"],
         }
     )
-    st.dataframe(format_dataframe(detail, currency_columns=["bad_early_end_balance", "bad_late_end_balance"], percent_columns=["bad_early_return", "bad_late_return"]), use_container_width=True)
+    st.dataframe(format_dataframe(detail, currency_columns=["bad_early_end_balance", "bad_late_end_balance"], percent_columns=["bad_early_return", "bad_late_return"]), width="stretch")
 
     st.caption(labels["caption"])

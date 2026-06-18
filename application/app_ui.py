@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from pathlib import Path
 import base64
+import html
 
 import streamlit as st
 
@@ -36,7 +37,7 @@ def inject_css() -> None:
         <style>
         .block-container {{
             padding-top: 1.25rem;
-            padding-bottom: 2rem;
+            padding-bottom: 5.5rem;
         }}
         .mesh-hero {{
             padding: 1.1rem 1.25rem;
@@ -125,6 +126,32 @@ def render_icon_link_button(label: str, url: str, icon_path: str, *, css_class: 
 def render_explainer(label: str, body: str, *, expanded: bool = False) -> None:
     with st.expander(label, expanded=expanded):
         st.markdown(body)
+
+
+
+def render_global_footer(text: str) -> None:
+    st.markdown(
+        f"""
+        <div class="mesh-global-footer">{html.escape(text)}</div>
+        <style>
+        .mesh-global-footer {{
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 999;
+            padding: 0.7rem 1rem 0.85rem 1rem;
+            text-align: center;
+            font-size: 0.84rem;
+            color: rgba(250,250,250,0.78);
+            background: rgba(10, 14, 20, 0.92);
+            border-top: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(8px);
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 

@@ -37,6 +37,12 @@ CATALOG: dict[str, Any] = {
         "yes": {"en": "yes", "zh": "是"},
         "no": {"en": "no", "zh": "否"},
     },
+    "footer": {
+        "disclaimer": {
+            "en": "Educational planning tool only. Not tax, legal, investment, or financial advice. Please review important decisions with a qualified professional.",
+            "zh": "本工具仅供教育与规划参考，不构成税务、法律、投资或财务建议。重大决策请与合格的专业人士确认。"
+        }
+    },
     "suite": {
         "title": {"en": "Retirement Planning, Demystified", "zh": "退休规划，化繁为简"},
         "home_subtitle": {
@@ -94,6 +100,10 @@ CATALOG: dict[str, Any] = {
             "en": "These values stay saved for this browser session. You can reset everything to defaults, download the current assumptions to JSON, or load a saved JSON file back into the app.",
             "zh": "这些值会保存在当前浏览器会话中。你现在可以重置为默认值、下载当前假设为 JSON，或把已保存的 JSON 重新加载回应用。",
         },
+        "privacy_note": {
+            "en": "Privacy note: this app does not save personal data to a database; values stay only in your browser session unless you export them yourself.",
+            "zh": "隐私说明：本应用不会把个人数据保存到数据库；除非你自己导出，否则数据只保留在当前浏览器会话中。",
+        },
         "help": {
             "current_age": {"en": "Your age today. The app uses this as the starting point for all retirement timing and growth projections.", "zh": "你现在的年龄。应用会用它作为所有退休时间线和资产增长预测的起点。"},
             "retirement_age": {"en": "The age when you stop regular work and begin relying on portfolio income, Social Security, pension income, or withdrawals.", "zh": "你停止常规工作、开始依赖投资组合收入、社保、养老金或提款的年龄。"},
@@ -130,6 +140,10 @@ CATALOG: dict[str, Any] = {
         "note": {
             "en": "The common facts stay with you as you move around, so each page can focus on one question at a time.",
             "zh": "这些通用信息会一直保留，这样每个页面就能专注回答一个问题。",
+        },
+        "privacy_note": {
+            "en": "Privacy note: this app does not save personal data to a database; values stay only in your browser session unless you export them yourself.",
+            "zh": "隐私说明：本应用不会把个人数据保存到数据库；除非你自己导出，否则数据只保留在当前浏览器会话中。",
         },
         "current_structure": {"en": "Current structure", "zh": "当前结构"},
     },

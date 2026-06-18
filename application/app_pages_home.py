@@ -65,6 +65,7 @@ def render_page() -> None:
 
     col1, col2 = st.columns([1.25, 1.0])
     with col1:
+        render_note(home_labels["privacy_note"])
         st.subheader(home_labels["included_apps"])
         for group_label, items in TOOLS[lang].items():
             st.markdown(f"**{group_label}**")

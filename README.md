@@ -1,20 +1,31 @@
 # Retirement Planning, Demystified
 
-A Streamlit-based retirement planning workspace for exploring common retirement questions such as readiness, Roth conversions, Social Security timing, IRMAA exposure, withdrawal strategy, and sequence risk.
+A Streamlit-based retirement planning workspace for exploring common retirement questions such as retirement readiness, Roth conversions, Social Security timing, Medicare IRMAA exposure, withdrawal strategy, spending patterns, savings rate, and sequence risk.
 
 ## Included tools
 
+- Home
 - Shared Assumptions
-- RMD / Roth Conversion Strategy
 - Retirement Readiness
 - Social Security Optimizer
+- Savings Rate / Catch-Up
+- Spending Smile Planner
+- Mega Backdoor Roth
+- RMD / Roth Conversion Strategy
 - Medicare IRMAA
 - Sequence Risk Visualizer
 - Safe Withdrawal Guardrails
 - Withdrawal Order
-- Spending Smile Planner
-- Savings Rate / Catch-Up
-- Mega Backdoor Roth
+- Feedback
+
+## Current features
+
+- Shared assumptions across calculators via Streamlit session state
+- English / Chinese language support
+- Cookie-based language persistence
+- JSON export / import for shared assumptions
+- Plain-language explainers embedded in calculator pages
+- Dedicated feedback page with GitHub issue and support links
 
 ## Stack
 
@@ -23,21 +34,22 @@ A Streamlit-based retirement planning workspace for exploring common retirement 
 - pandas
 - numpy
 - plotly
+- st-cookie
 
 ## Structure
 
 ```text
 retirement-planning/
 ├── application/
-│   ├── app.py                 # Main Streamlit entrypoint
-│   ├── app_state.py           # Shared session-state defaults and helpers
-│   ├── app_i18n.py            # Language strings / i18n support
-│   ├── app_ui.py              # Shared UI helpers
-│   ├── app_shell.py           # Shared page setup
-│   ├── app_pages_*.py         # Calculator page implementations
-│   └── pages/                 # Streamlit multipage wrappers
+│   ├── app.py                         # Main Streamlit entrypoint and navigation
+│   ├── app_state.py                   # Shared session-state defaults, import/export, persistence helpers
+│   ├── app_i18n.py                    # Language strings and i18n helpers
+│   ├── app_ui.py                      # Shared UI helpers
+│   ├── app_shell.py                   # Global page setup, cookies, CSS, language switcher
+│   ├── app_pages_*.py                 # Calculator and content page implementations
+│   └── assets/                        # Static assets such as flags and icons
 ├── requirements.txt
-└── requirements.lock.txt
+└── README.md
 ```
 
 ## Setup
@@ -45,10 +57,11 @@ retirement-planning/
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
+pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## Run
+## Run locally
 
 ```bash
 cd application
@@ -57,13 +70,12 @@ streamlit run app.py --server.port 8501
 
 Then open the local Streamlit URL shown in the terminal.
 
-## Notes
+## Deployment / local helper notes
 
 - Main entrypoint: `application/app.py`
-- Common assumptions are shared across pages through session state
-- Each calculator page now includes a foldable plain-language explainer
-- `runapp.bat` is intentionally excluded from version control as a local helper
-- `requirements.lock.txt` is kept alongside `requirements.txt`
+- Render helper script uses port `8880` and binds to `0.0.0.0`
+- OCI helper script uses port `8880` and binds to `127.0.0.1`
+- `runapp-oci.sh`, `runapp-render.sh`, and `requirements.lock.txt` are local helper files and are intentionally gitignored
 
 ## Disclaimer
 

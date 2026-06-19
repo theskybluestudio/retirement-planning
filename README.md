@@ -70,13 +70,6 @@ streamlit run app.py --server.port 8501
 
 Then open the local Streamlit URL shown in the terminal.
 
-## Deployment / local helper notes
-
-- Main entrypoint: `application/app.py`
-- Render helper script uses port `8880` and binds to `0.0.0.0`
-- OCI helper script uses port `8880` and binds to `127.0.0.1`
-- `runapp-oci.sh`, `runapp-render.sh`, and `requirements.lock.txt` are local helper files and are intentionally gitignored
-
 ## Disclaimer
 
 This project is for educational planning and estimation only. It is not tax, legal, investment, or financial advice.

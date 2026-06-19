@@ -46,6 +46,11 @@ htmlcov/
 # Local helper scripts
 runapp.bat
 runapp-local.bat
+runapp-oci.sh
+runapp-render.sh
+
+# Local lockfiles
+requirements.lock.txt
 
 # Local archive / legacy work
 application/_legacy/

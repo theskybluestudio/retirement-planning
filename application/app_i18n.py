@@ -44,10 +44,14 @@ CATALOG: dict[str, Any] = {
         }
     },
     "suite": {
-        "title": {"en": "Retirement Planning, Demystified", "zh": "退休规划，化繁为简"},
+        "title": {"en": "Retirement Planning Calculators", "zh": "退休规划计算器"},
         "home_subtitle": {
-            "en": "A simple retirement planning workspace that helps you think through the big questions — how much to save, when to retire, when to claim Social Security, and how to make the money last.",
-            "zh": "一个简单的退休规划空间，帮助你理清几个重要问题——要存多少、何时退休、何时领取社保，以及如何让资金撑得更久。",
+            "en": "A retirement planning calculator suite for Roth conversions, Social Security claiming, IRMAA, withdrawal strategy, sequence risk, and retirement readiness.",
+            "zh": "一个退休规划计算器套件，涵盖 Roth 转换、社保领取、IRMAA、提款策略、收益顺序风险和退休准备度。",
+        },
+        "seo_intro": {
+            "en": "Explore practical retirement planning calculators for common decisions: retirement readiness, Roth conversion planning, Social Security timing, Medicare IRMAA checks, safe withdrawal guardrails, and tax-aware withdrawal order.",
+            "zh": "探索实用的退休规划计算器，涵盖常见决策：退休准备度、Roth 转换规划、社保领取时点、Medicare IRMAA 检查、安全提款护栏，以及税务友好的提款顺序。",
         },
         "live_tools": {"en": "Live tools", "zh": "可用工具"},
         "most_complete_page": {"en": "Most complete page", "zh": "最完整页面"},

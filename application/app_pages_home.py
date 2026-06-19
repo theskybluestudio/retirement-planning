@@ -53,6 +53,32 @@ TOOLS = {
 }
 
 
+SEO_COPY = {
+    "en": {
+        "what_it_is": "This is a retirement planning calculator suite for people who want practical answers about retirement readiness, Social Security timing, Roth conversions, Medicare IRMAA, withdrawal strategy, and sequence risk.",
+        "why_it_matters": "If you're searching for a retirement planning calculator, this page is the best entry point: one place to explore the most common retirement decisions and move into the tool that matches your question.",
+        "search_terms": "Common searches this app covers: retirement planning calculator, retirement readiness calculator, Social Security claiming calculator, Roth conversion calculator, IRMAA calculator, safe withdrawal rate calculator, and withdrawal order calculator.",
+        "faq": [
+            ("Is this a financial advice tool?", "No. It is an educational planning tool for estimates and comparisons, not tax, legal, investment, or financial advice."),
+            ("Do I need to re-enter the same facts on every page?", "No. Shared assumptions keep the main numbers in one place so the calculators can reuse them."),
+            ("What should I start with?", "Start with Shared Assumptions, then open the calculator for the decision you want to test."),
+            ("Does this app cover Roth conversions and RMD planning?", "Yes. The app includes an RMD / Roth Conversion Strategy page plus Medicare IRMAA checks and other retirement income tools."),
+        ],
+    },
+    "zh": {
+        "what_it_is": "这是一个退休规划计算器套件，适合想快速了解退休准备度、社保领取时点、Roth 转换、Medicare IRMAA、提款策略和收益顺序风险的人。",
+        "why_it_matters": "如果你在找退休规划计算器，这一页就是最好的入口：在一个地方浏览最常见的退休决策，并进入对应工具。",
+        "search_terms": "本应用覆盖的常见搜索词包括：退休规划计算器、退休准备度计算器、社保领取计算器、Roth 转换计算器、IRMAA 计算器、安全提款率计算器和提款顺序计算器。",
+        "faq": [
+            ("这是理财建议工具吗？", "不是。它是用于估算和比较的教育性规划工具，不构成税务、法律、投资或财务建议。"),
+            ("每个页面都要重复输入同样的信息吗？", "不用。共享假设会把主要数字保存在一个地方，让各计算器复用。"),
+            ("应该先从哪里开始？", "先打开“共享假设”，再进入你想测试的具体计算器。"),
+            ("这个应用包含 Roth 转换和 RMD 规划吗？", "包含。应用里有 RMD / Roth 转换策略页面，也有 Medicare IRMAA 和其他退休收入工具。"),
+        ],
+    },
+}
+
+
 def render_page() -> None:
     lang = st.session_state.get("language", "en")
     suite_labels = section("suite")
@@ -66,11 +92,16 @@ def render_page() -> None:
     col1, col2 = st.columns([1.25, 1.0])
     with col1:
         render_note(home_labels["privacy_note"])
+        st.markdown(f"**{SEO_COPY[lang]['what_it_is']}**")
+        st.markdown(SEO_COPY[lang]["why_it_matters"])
         st.subheader(home_labels["included_apps"])
         for group_label, items in TOOLS[lang].items():
             st.markdown(f"**{group_label}**")
             for name, description in items:
                 st.markdown(f"- **{name}** — {description}")
+
+        st.markdown(f"### {suite_labels['live_tools']}")
+        st.markdown(SEO_COPY[lang]["search_terms"])
 
     with col2:
         st.subheader(home_labels["how_to_use"])
@@ -81,3 +112,8 @@ def render_page() -> None:
             f"{home_labels['step_4']}"
         )
         render_note(home_labels["note"])
+
+        st.markdown("### FAQ")
+        for question, answer in SEO_COPY[lang]["faq"]:
+            with st.expander(question):
+                st.markdown(answer)

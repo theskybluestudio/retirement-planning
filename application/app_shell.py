@@ -11,7 +11,7 @@ from app_ui import inject_css
 
 
 def setup_page(page_title: str) -> None:
-    st.set_page_config(page_title=page_title, layout="wide")
+    st.set_page_config(page_title=page_title, page_icon="🕸️", layout="wide")
     init_session_state()
     st_cookie.apply()
     init_i18n()

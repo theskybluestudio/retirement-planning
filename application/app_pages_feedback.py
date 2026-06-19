@@ -9,7 +9,7 @@ from app_i18n import section
 from app_ui import render_header, render_icon_link_button, render_note
 
 
-REPO_URL = "https://github.com/lurrnet/retirement-planning"
+REPO_URL = "https://github.com/theskybluestudio/retirement-planning"
 ISSUES_URL = f"{REPO_URL}/issues"
 PAYPAL_URL = "https://www.paypal.com/donate/?hosted_button_id=N8E2PJ3ET7Q6N"
 PAYPAL_ICON = Path(__file__).parent / "assets" / "paypal.svg"

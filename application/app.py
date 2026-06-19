@@ -82,7 +82,7 @@ def render_sidebar_navigation(nav_sections: dict[str, list[st.Page]]) -> None:
 
 
 def main() -> None:
-    setup_page("Retirement Planning, Demystified")
+    setup_page("Retirement Planning Calculator Suite | Roth Conversion, Social Security, IRMAA")
     nav_sections = build_navigation()
     navigation = st.navigation([page for pages in nav_sections.values() for page in pages], position="hidden")
     render_sidebar_navigation(nav_sections)

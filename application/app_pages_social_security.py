@@ -39,7 +39,7 @@ def render_page() -> None:
     render_shared_assumptions_panel(common, assumptions, highlighted_keys=USED_SHARED_ASSUMPTIONS)
 
     with render_input_section(common["page_specific_inputs"]):
-        input_cols = st.columns(2)
+        input_cols = st.columns(3)
         with input_cols[0]:
             longevity_age = st.number_input(labels["longevity_age"], min_value=70, max_value=100, key="ss_longevity_age", help=tooltip("social_security", "longevity_age"))
         with input_cols[1]:

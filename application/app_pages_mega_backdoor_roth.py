@@ -87,18 +87,19 @@ def render_page() -> None:
     age = int(st.session_state.current_age)
 
     with render_input_section(common["page_specific_inputs"]):
-        left, right = st.columns(2)
-        with left:
+        col1, col2, col3 = st.columns(3)
+        with col1:
             tax_year = st.selectbox(labels["tax_year"], options=sorted(LIMITS_BY_YEAR.keys()), index=sorted(LIMITS_BY_YEAR.keys()).index(default_year), key="mega_tax_year", help=tooltip("mega_backdoor", "tax_year"))
         limits = LIMITS_BY_YEAR[int(tax_year)]
         synced_catch_up = _sync_catch_up_limit(age, int(tax_year))
-        with left:
+        with col1:
             compensation = money_input(labels["eligible_compensation"], min_value=0.0, value=float(st.session_state.get("mega_compensation", 200_000.0)), key="mega_compensation", help=tooltip("mega_backdoor", "eligible_compensation"))
             employee_deferrals = money_input(labels["employee_deferrals"], min_value=0.0, value=float(st.session_state.get("mega_employee_deferrals", st.session_state.annual_contribution)), key="mega_employee_deferrals", help=tooltip("mega_backdoor", "employee_deferrals"))
+        with col2:
             employer_contributions = money_input(labels["employer_contributions"], min_value=0.0, value=float(st.session_state.get("mega_employer_contributions", 0.0)), key="mega_employer_contributions", help=tooltip("mega_backdoor", "employer_contributions"))
             after_tax_already = money_input(labels["after_tax_already"], min_value=0.0, value=float(st.session_state.get("mega_after_tax_already", 0.0)), key="mega_after_tax_already", help=tooltip("mega_backdoor", "after_tax_already"))
-        with right:
             catch_up_limit = money_input(labels["catch_up_limit"], min_value=0.0, value=synced_catch_up, key="mega_catch_up_limit", help=tooltip("mega_backdoor", "catch_up_limit"))
+        with col3:
             plan_after_tax_cap = money_input(labels["plan_after_tax_cap"], min_value=0.0, value=float(st.session_state.get("mega_plan_after_tax_cap", 0.0)), key="mega_plan_after_tax_cap", help=tooltip("mega_backdoor", "plan_after_tax_cap"))
             allows_after_tax = st.checkbox(labels["allows_after_tax"], value=bool(st.session_state.get("mega_allows_after_tax", True)), key="mega_allows_after_tax", help=tooltip("mega_backdoor", "allows_after_tax"))
             allows_conversion = st.checkbox(labels["allows_conversion"], value=bool(st.session_state.get("mega_allows_conversion", True)), key="mega_allows_conversion", help=tooltip("mega_backdoor", "allows_conversion"))

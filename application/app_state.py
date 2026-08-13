@@ -202,23 +202,29 @@ def render_shared_assumptions_panel(
         prime_shared_widget(key)
 
     with st.expander(common_labels["shared_inputs"], expanded=expanded):
-        left, right = st.columns(2)
-        with left:
+        col1, col2, col3 = st.columns(3)
+        with col1:
             st.subheader(assumptions_labels["personal"])
             st.number_input(_format_assumption_label(assumptions_labels["current_age"], "current_age", highlight_set), min_value=18, max_value=80, key=shared_widget_key("current_age"), on_change=commit_shared_widget, args=("current_age",), help=tooltip("assumptions", "current_age"))
             st.number_input(_format_assumption_label(assumptions_labels["retirement_age"], "retirement_age", highlight_set), min_value=25, max_value=80, key=shared_widget_key("retirement_age"), on_change=commit_shared_widget, args=("retirement_age",), help=tooltip("assumptions", "retirement_age"))
             st.number_input(_format_assumption_label(assumptions_labels["life_expectancy"], "life_expectancy", highlight_set), min_value=70, max_value=105, key=shared_widget_key("life_expectancy"), on_change=commit_shared_widget, args=("life_expectancy",), help=tooltip("assumptions", "life_expectancy"))
             st.selectbox(_format_assumption_label(assumptions_labels["filing_status"], "filing_status", highlight_set), options=["mfj", "single"], key=shared_widget_key("filing_status"), on_change=commit_shared_widget, args=("filing_status",), help=tooltip("assumptions", "filing_status"))
+            st.subheader(assumptions_labels["cash_flow"])
+            money_input(_format_assumption_label(assumptions_labels["annual_contribution"], "annual_contribution", highlight_set), min_value=0.0, key=shared_widget_key("annual_contribution"), on_change=commit_shared_widget, args=("annual_contribution",), help=tooltip("assumptions", "annual_contribution"))
+            money_input(_format_assumption_label(assumptions_labels["annual_retirement_spending"], "annual_retirement_spending", highlight_set), min_value=0.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",), help=tooltip("assumptions", "annual_retirement_spending"))
 
+        with col2:
             st.subheader(assumptions_labels["accounts"])
             money_input(_format_assumption_label(assumptions_labels["traditional_balance"], "traditional_balance", highlight_set), min_value=0.0, key=shared_widget_key("traditional_balance"), on_change=commit_shared_widget, args=("traditional_balance",), help=tooltip("assumptions", "traditional_balance"))
             money_input(_format_assumption_label(assumptions_labels["roth_balance"], "roth_balance", highlight_set), min_value=0.0, key=shared_widget_key("roth_balance"), on_change=commit_shared_widget, args=("roth_balance",), help=tooltip("assumptions", "roth_balance"))
             money_input(_format_assumption_label(assumptions_labels["taxable_balance"], "taxable_balance", highlight_set), min_value=0.0, key=shared_widget_key("taxable_balance"), on_change=commit_shared_widget, args=("taxable_balance",), help=tooltip("assumptions", "taxable_balance"))
+            st.subheader(assumptions_labels["market_tax"])
+            percent_input(_format_assumption_label(assumptions_labels["annual_return"], "annual_return", highlight_set), min_value=0.0, max_value=0.20, key=shared_widget_key("annual_return"), on_change=commit_shared_widget, args=("annual_return",), help=tooltip("assumptions", "annual_return"))
+            percent_input(_format_assumption_label(assumptions_labels["inflation"], "inflation", highlight_set), min_value=0.0, max_value=0.10, key=shared_widget_key("inflation"), on_change=commit_shared_widget, args=("inflation",), help=tooltip("assumptions", "inflation"))
+            percent_input(_format_assumption_label(assumptions_labels["state_tax_rate"], "state_tax_rate", highlight_set), min_value=0.0, max_value=0.20, key=shared_widget_key("state_tax_rate"), on_change=commit_shared_widget, args=("state_tax_rate",), help=tooltip("assumptions", "state_tax_rate"))
 
-        with right:
+        with col3:
             st.subheader(assumptions_labels["cash_flow"])
-            money_input(_format_assumption_label(assumptions_labels["annual_contribution"], "annual_contribution", highlight_set), min_value=0.0, key=shared_widget_key("annual_contribution"), on_change=commit_shared_widget, args=("annual_contribution",), help=tooltip("assumptions", "annual_contribution"))
-            money_input(_format_assumption_label(assumptions_labels["annual_retirement_spending"], "annual_retirement_spending", highlight_set), min_value=0.0, key=shared_widget_key("annual_retirement_spending"), on_change=commit_shared_widget, args=("annual_retirement_spending",), help=tooltip("assumptions", "annual_retirement_spending"))
             money_input(_format_assumption_label(assumptions_labels["annual_ss_benefit_fra"], "social_security_fra_benefit", highlight_set), min_value=0.0, key=shared_widget_key("social_security_fra_benefit"), on_change=commit_shared_widget, args=("social_security_fra_benefit",), help=tooltip("assumptions", "annual_ss_benefit_fra"))
             st.number_input(_format_assumption_label(assumptions_labels["ss_claim_age"], "social_security_claim_age", highlight_set), min_value=62, max_value=75, key=shared_widget_key("social_security_claim_age"), on_change=commit_shared_widget, args=("social_security_claim_age",), help=tooltip("assumptions", "ss_claim_age"))
             sync_estimated_social_security_benefit()
@@ -226,10 +232,6 @@ def render_shared_assumptions_panel(
             money_input(_format_assumption_label(assumptions_labels["annual_pension_income"], "annual_pension_income", highlight_set), min_value=0.0, key=shared_widget_key("annual_pension_income"), on_change=commit_shared_widget, args=("annual_pension_income",), help=tooltip("assumptions", "annual_pension_income"))
             money_input(_format_assumption_label(assumptions_labels["annual_other_income"], "annual_other_income", highlight_set), min_value=0.0, key=shared_widget_key("annual_other_income"), on_change=commit_shared_widget, args=("annual_other_income",), help=tooltip("assumptions", "annual_other_income"))
 
-            st.subheader(assumptions_labels["market_tax"])
-            percent_input(_format_assumption_label(assumptions_labels["annual_return"], "annual_return", highlight_set), min_value=0.0, max_value=0.20, key=shared_widget_key("annual_return"), on_change=commit_shared_widget, args=("annual_return",), help=tooltip("assumptions", "annual_return"))
-            percent_input(_format_assumption_label(assumptions_labels["inflation"], "inflation", highlight_set), min_value=0.0, max_value=0.10, key=shared_widget_key("inflation"), on_change=commit_shared_widget, args=("inflation",), help=tooltip("assumptions", "inflation"))
-            percent_input(_format_assumption_label(assumptions_labels["state_tax_rate"], "state_tax_rate", highlight_set), min_value=0.0, max_value=0.20, key=shared_widget_key("state_tax_rate"), on_change=commit_shared_widget, args=("state_tax_rate",), help=tooltip("assumptions", "state_tax_rate"))
 
 
 

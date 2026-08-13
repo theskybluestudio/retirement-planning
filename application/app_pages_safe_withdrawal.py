@@ -61,7 +61,7 @@ def render_page() -> None:
     render_shared_assumptions_panel(common, assumptions, highlighted_keys=USED_SHARED_ASSUMPTIONS)
 
     with render_input_section(common["page_specific_inputs"]):
-        input_cols = st.columns(2)
+        input_cols = st.columns(3)
         with input_cols[0]:
             floor_rate = percent_input(labels["lower_guardrail"], min_value=0.01, max_value=0.10, key="guard_floor_rate", help=tooltip("safe_withdrawal", "lower_guardrail"))
         with input_cols[1]:

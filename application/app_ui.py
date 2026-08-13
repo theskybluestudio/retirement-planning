@@ -36,18 +36,18 @@ def inject_css() -> None:
         f"""
         <style>
         .block-container {{
-            padding-top: 1.25rem;
+            padding-top: 3rem;
             padding-bottom: 5.5rem;
         }}
         .mesh-hero {{
-            padding: 1.1rem 1.25rem;
+            padding: 0.5rem 1.25rem;
             border: 1px solid rgba(15, 118, 110, 0.18);
             border-radius: 16px;
             background: linear-gradient(135deg, rgba(15,118,110,0.10), rgba(14,165,233,0.05));
             margin-bottom: 1rem;
         }}
         .mesh-hero h1 {{
-            margin: 0 0 0.35rem 0;
+            margin: 0 0 0 0;
             font-size: 2rem;
         }}
         .mesh-hero p {{

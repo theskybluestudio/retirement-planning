@@ -6,7 +6,12 @@ import streamlit as st
 
 from app_i18n import section, tooltip
 from app_state import render_shared_assumptions_panel
-from app_ui import format_currency, format_dataframe, render_explainer, render_header, render_note
+from app_ui import format_currency, format_dataframe, render_explainer, render_header, render_input_section, render_note
+
+USED_SHARED_ASSUMPTIONS = {
+    "social_security_fra_benefit",
+    "social_security_claim_age",
+}
 
 
 CLAIMING_FACTORS = {
@@ -31,13 +36,14 @@ def render_page() -> None:
     render_header(labels["title"], labels["subtitle"])
     render_explainer(common["about_tool"], labels["about_body"])
 
-    render_shared_assumptions_panel(common, assumptions)
+    render_shared_assumptions_panel(common, assumptions, highlighted_keys=USED_SHARED_ASSUMPTIONS)
 
-    with st.sidebar:
-        st.divider()
-        st.header(common["page_specific_inputs"])
-        longevity_age = st.number_input(labels["longevity_age"], min_value=70, max_value=100, key="ss_longevity_age", help=tooltip("social_security", "longevity_age"))
-        selected_claim_age = st.slider(labels["highlight_age"], min_value=62, max_value=70, value=67, key="ss_selected_claim_age")
+    with render_input_section(common["page_specific_inputs"]):
+        input_cols = st.columns(2)
+        with input_cols[0]:
+            longevity_age = st.number_input(labels["longevity_age"], min_value=70, max_value=100, key="ss_longevity_age", help=tooltip("social_security", "longevity_age"))
+        with input_cols[1]:
+            selected_claim_age = st.slider(labels["highlight_age"], min_value=62, max_value=70, value=67, key="ss_selected_claim_age")
 
     fra_annual_benefit = float(st.session_state.social_security_fra_benefit)
 

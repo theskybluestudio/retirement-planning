@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+from contextlib import contextmanager
 from pathlib import Path
 import base64
 import html
@@ -127,6 +128,15 @@ def render_explainer(label: str, body: str, *, expanded: bool = False) -> None:
     with st.expander(label, expanded=expanded):
         st.markdown(body)
 
+
+
+@contextmanager
+def render_input_section(title: str, *, caption: str | None = None):
+    with st.container(border=True):
+        st.subheader(title)
+        if caption:
+            st.caption(caption)
+        yield
 
 
 def render_global_footer(text: str) -> None:

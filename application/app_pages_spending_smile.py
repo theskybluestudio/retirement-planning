@@ -6,7 +6,12 @@ import streamlit as st
 
 from app_i18n import section, tooltip
 from app_state import render_shared_assumptions_panel
-from app_ui import format_currency, format_dataframe, money_input, render_explainer, render_header, render_note
+from app_ui import format_currency, format_dataframe, money_input, render_explainer, render_header, render_input_section, render_note
+
+USED_SHARED_ASSUMPTIONS = {
+    "retirement_age",
+    "annual_retirement_spending",
+}
 
 
 
@@ -18,18 +23,19 @@ def render_page() -> None:
     render_header(labels["title"], labels["subtitle"])
     render_explainer(common["about_tool"], labels["about_body"])
 
-    render_shared_assumptions_panel(common, assumptions)
+    render_shared_assumptions_panel(common, assumptions, highlighted_keys=USED_SHARED_ASSUMPTIONS)
 
-    with st.sidebar:
-        st.divider()
-        st.header(common["page_specific_inputs"])
-        go_go_years = st.number_input(labels["go_go_years"], min_value=1, max_value=20, value=10, key="smile_go_go_years", help=tooltip("spending_smile", "go_go_years"))
-        go_go_multiplier = st.number_input(labels["go_go_multiplier"], min_value=0.5, max_value=2.0, value=1.15, step=0.05, key="smile_go_go_multiplier", help=tooltip("spending_smile", "go_go_multiplier"))
-        slow_go_years = st.number_input(labels["slow_go_years"], min_value=1, max_value=20, value=10, key="smile_slow_go_years", help=tooltip("spending_smile", "slow_go_years"))
-        slow_go_multiplier = st.number_input(labels["slow_go_multiplier"], min_value=0.5, max_value=2.0, value=0.95, step=0.05, key="smile_slow_go_multiplier", help=tooltip("spending_smile", "slow_go_multiplier"))
-        no_go_years = st.number_input(labels["no_go_years"], min_value=1, max_value=20, value=10, key="smile_no_go_years", help=tooltip("spending_smile", "no_go_years"))
-        no_go_multiplier = st.number_input(labels["no_go_multiplier"], min_value=0.5, max_value=2.0, value=0.80, step=0.05, key="smile_no_go_multiplier", help=tooltip("spending_smile", "no_go_multiplier"))
-        healthcare_step_up = money_input(labels["healthcare_step_up"], min_value=0.0, value=15_000.0, key="smile_healthcare_step_up", help=tooltip("spending_smile", "healthcare_step_up"))
+    with render_input_section(common["page_specific_inputs"]):
+        left, right = st.columns(2)
+        with left:
+            go_go_years = st.number_input(labels["go_go_years"], min_value=1, max_value=20, value=10, key="smile_go_go_years", help=tooltip("spending_smile", "go_go_years"))
+            go_go_multiplier = st.number_input(labels["go_go_multiplier"], min_value=0.5, max_value=2.0, value=1.15, step=0.05, key="smile_go_go_multiplier", help=tooltip("spending_smile", "go_go_multiplier"))
+            slow_go_years = st.number_input(labels["slow_go_years"], min_value=1, max_value=20, value=10, key="smile_slow_go_years", help=tooltip("spending_smile", "slow_go_years"))
+            slow_go_multiplier = st.number_input(labels["slow_go_multiplier"], min_value=0.5, max_value=2.0, value=0.95, step=0.05, key="smile_slow_go_multiplier", help=tooltip("spending_smile", "slow_go_multiplier"))
+        with right:
+            no_go_years = st.number_input(labels["no_go_years"], min_value=1, max_value=20, value=10, key="smile_no_go_years", help=tooltip("spending_smile", "no_go_years"))
+            no_go_multiplier = st.number_input(labels["no_go_multiplier"], min_value=0.5, max_value=2.0, value=0.80, step=0.05, key="smile_no_go_multiplier", help=tooltip("spending_smile", "no_go_multiplier"))
+            healthcare_step_up = money_input(labels["healthcare_step_up"], min_value=0.0, value=15_000.0, key="smile_healthcare_step_up", help=tooltip("spending_smile", "healthcare_step_up"))
 
     retirement_age = int(st.session_state.retirement_age)
     base_spending = float(st.session_state.annual_retirement_spending)

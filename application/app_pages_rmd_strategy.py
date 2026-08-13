@@ -6,8 +6,27 @@ import streamlit as st
 
 from app_i18n import section, tooltip
 from app_state import render_shared_assumptions_panel
-from app_ui import format_currency, format_dataframe, format_percent, money_input, percent_input, render_explainer, render_header, render_note
+from app_ui import format_currency, format_dataframe, format_percent, money_input, percent_input, render_explainer, render_header, render_input_section, render_note
 from roth_conversion_engine import PlanInputs, compare_strategies, project_late_life_metrics, result_rows
+
+USED_SHARED_ASSUMPTIONS = {
+    "current_age",
+    "retirement_age",
+    "life_expectancy",
+    "filing_status",
+    "traditional_balance",
+    "roth_balance",
+    "taxable_balance",
+    "annual_contribution",
+    "annual_retirement_spending",
+    "annual_social_security_benefit",
+    "social_security_fra_benefit",
+    "social_security_claim_age",
+    "annual_pension_income",
+    "annual_other_income",
+    "annual_return",
+    "state_tax_rate",
+}
 
 
 def _strategy_label(key: str, zh: bool = False) -> str:
@@ -59,14 +78,16 @@ def render_page() -> None:
     render_header(labels["title"], labels["subtitle"])
     render_explainer(common["about_tool"], labels["about_body"])
 
-    render_shared_assumptions_panel(common, assumptions)
+    render_shared_assumptions_panel(common, assumptions, highlighted_keys=USED_SHARED_ASSUMPTIONS)
 
-    with st.sidebar:
-        st.divider()
-        st.header(common["page_specific_inputs"])
-        target_bracket = st.selectbox(labels["target_bracket"], options=["12%", "22%", "24%", "32%"], key="rmd_target_bracket", help=tooltip("rmd", "target_bracket"))
-        use_aca_model = st.checkbox(labels["aca"], key="rmd_use_aca_model", help=tooltip("rmd", "aca"))
-        use_irmaa_model = st.checkbox(labels["irmaa"], key="rmd_use_irmaa_model", help=tooltip("rmd", "irmaa"))
+    with render_input_section(common["page_specific_inputs"]):
+        input_cols = st.columns(3)
+        with input_cols[0]:
+            target_bracket = st.selectbox(labels["target_bracket"], options=["12%", "22%", "24%", "32%"], key="rmd_target_bracket", help=tooltip("rmd", "target_bracket"))
+        with input_cols[1]:
+            use_aca_model = st.checkbox(labels["aca"], key="rmd_use_aca_model", help=tooltip("rmd", "aca"))
+        with input_cols[2]:
+            use_irmaa_model = st.checkbox(labels["irmaa"], key="rmd_use_irmaa_model", help=tooltip("rmd", "irmaa"))
 
     current_age = int(st.session_state.current_age)
     retirement_age = int(st.session_state.retirement_age)

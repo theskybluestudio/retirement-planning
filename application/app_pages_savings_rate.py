@@ -5,7 +5,17 @@ import streamlit as st
 
 from app_i18n import section, tooltip
 from app_state import render_shared_assumptions_panel
-from app_ui import format_currency, format_percent, money_input, render_explainer, render_header, render_note
+from app_ui import format_currency, format_percent, money_input, render_explainer, render_header, render_input_section, render_note
+
+USED_SHARED_ASSUMPTIONS = {
+    "current_age",
+    "retirement_age",
+    "traditional_balance",
+    "roth_balance",
+    "taxable_balance",
+    "annual_contribution",
+    "annual_return",
+}
 
 
 
@@ -35,11 +45,9 @@ def render_page() -> None:
     render_header(labels["title"], labels["subtitle"])
     render_explainer(common["about_tool"], labels["about_body"])
 
-    render_shared_assumptions_panel(common, assumptions)
+    render_shared_assumptions_panel(common, assumptions, highlighted_keys=USED_SHARED_ASSUMPTIONS)
 
-    with st.sidebar:
-        st.divider()
-        st.header(common["page_specific_inputs"])
+    with render_input_section(common["page_specific_inputs"]):
         target_portfolio = money_input(labels["target_portfolio"], min_value=0.0, key="save_target_portfolio", help=tooltip("savings_rate", "target_portfolio"))
 
     current_age = int(st.session_state.current_age)

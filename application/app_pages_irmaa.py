@@ -6,8 +6,17 @@ import streamlit as st
 
 from app_i18n import section, tooltip
 from app_state import render_shared_assumptions_panel
-from app_ui import format_currency, format_dataframe, money_input, render_explainer, render_header, render_note
+from app_ui import format_currency, format_dataframe, money_input, render_explainer, render_header, render_input_section, render_note
 from roth_conversion_engine import IRMAA_2026
+
+USED_SHARED_ASSUMPTIONS = {
+    "filing_status",
+    "annual_other_income",
+    "annual_pension_income",
+    "annual_social_security_benefit",
+    "social_security_fra_benefit",
+    "social_security_claim_age",
+}
 
 
 
@@ -19,11 +28,9 @@ def render_page() -> None:
     render_header(labels["title"], labels["subtitle"])
     render_explainer(common["about_tool"], labels["about_body"])
 
-    render_shared_assumptions_panel(common, assumptions)
+    render_shared_assumptions_panel(common, assumptions, highlighted_keys=USED_SHARED_ASSUMPTIONS)
 
-    with st.sidebar:
-        st.divider()
-        st.header(common["page_specific_inputs"])
+    with render_input_section(common["page_specific_inputs"]):
         extra_income = money_input(labels["extra_income"], min_value=0.0, value=25_000.0, key="irmaa_extra_income", help=tooltip("irmaa", "extra_income"))
 
     filing_status = str(st.session_state.filing_status)

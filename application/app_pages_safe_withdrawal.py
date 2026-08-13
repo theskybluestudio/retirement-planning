@@ -6,7 +6,14 @@ import streamlit as st
 
 from app_i18n import section, tooltip
 from app_state import get_total_portfolio, render_shared_assumptions_panel
-from app_ui import format_currency, format_dataframe, format_percent, percent_input, render_explainer, render_header, render_note
+from app_ui import format_currency, format_dataframe, format_percent, percent_input, render_explainer, render_header, render_input_section, render_note
+
+USED_SHARED_ASSUMPTIONS = {
+    "traditional_balance",
+    "roth_balance",
+    "taxable_balance",
+    "annual_retirement_spending",
+}
 
 
 RETURNS = [-0.15, -0.08, 0.18, 0.12, 0.07, 0.11, -0.04, 0.09, 0.06, 0.08, 0.05, 0.07, -0.10, 0.14, 0.09]
@@ -51,13 +58,14 @@ def render_page() -> None:
     render_header(labels["title"], labels["subtitle"])
     render_explainer(common["about_tool"], labels["about_body"])
 
-    render_shared_assumptions_panel(common, assumptions)
+    render_shared_assumptions_panel(common, assumptions, highlighted_keys=USED_SHARED_ASSUMPTIONS)
 
-    with st.sidebar:
-        st.divider()
-        st.header(common["page_specific_inputs"])
-        floor_rate = percent_input(labels["lower_guardrail"], min_value=0.01, max_value=0.10, key="guard_floor_rate", help=tooltip("safe_withdrawal", "lower_guardrail"))
-        ceiling_rate = percent_input(labels["upper_guardrail"], min_value=0.02, max_value=0.15, key="guard_ceiling_rate", help=tooltip("safe_withdrawal", "upper_guardrail"))
+    with render_input_section(common["page_specific_inputs"]):
+        input_cols = st.columns(2)
+        with input_cols[0]:
+            floor_rate = percent_input(labels["lower_guardrail"], min_value=0.01, max_value=0.10, key="guard_floor_rate", help=tooltip("safe_withdrawal", "lower_guardrail"))
+        with input_cols[1]:
+            ceiling_rate = percent_input(labels["upper_guardrail"], min_value=0.02, max_value=0.15, key="guard_ceiling_rate", help=tooltip("safe_withdrawal", "upper_guardrail"))
 
     start_balance = get_total_portfolio()
     initial_withdrawal = float(st.session_state.annual_retirement_spending)

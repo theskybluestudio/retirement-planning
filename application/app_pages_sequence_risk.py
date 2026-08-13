@@ -8,6 +8,13 @@ from app_i18n import section
 from app_state import get_total_portfolio, render_shared_assumptions_panel
 from app_ui import format_currency, format_dataframe, render_explainer, render_header, render_note
 
+USED_SHARED_ASSUMPTIONS = {
+    "traditional_balance",
+    "roth_balance",
+    "taxable_balance",
+    "annual_retirement_spending",
+}
+
 
 
 def simulate_path(start_balance: float, annual_withdrawal: float, returns: list[float]) -> list[dict[str, float]]:
@@ -37,7 +44,7 @@ def render_page() -> None:
     render_header(labels["title"], labels["subtitle"])
     render_explainer(common["about_tool"], labels["about_body"])
 
-    render_shared_assumptions_panel(common, assumptions)
+    render_shared_assumptions_panel(common, assumptions, highlighted_keys=USED_SHARED_ASSUMPTIONS)
 
     start_balance = get_total_portfolio()
     annual_withdrawal = float(st.session_state.annual_retirement_spending)

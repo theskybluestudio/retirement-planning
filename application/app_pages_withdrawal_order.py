@@ -6,7 +6,14 @@ import streamlit as st
 
 from app_i18n import section
 from app_state import render_shared_assumptions_panel
-from app_ui import format_currency, format_dataframe, render_explainer, render_header, render_note
+from app_ui import format_currency, format_dataframe, render_explainer, render_header, render_input_section, render_note
+
+USED_SHARED_ASSUMPTIONS = {
+    "traditional_balance",
+    "roth_balance",
+    "taxable_balance",
+    "annual_retirement_spending",
+}
 
 
 TAX_RATE = 0.22
@@ -55,12 +62,10 @@ def render_page() -> None:
     render_header(labels["title"], labels["subtitle"])
     render_explainer(common["about_tool"], labels["about_body"])
 
-    render_shared_assumptions_panel(common, assumptions)
+    render_shared_assumptions_panel(common, assumptions, highlighted_keys=USED_SHARED_ASSUMPTIONS)
 
-    with st.sidebar:
-        st.divider()
-        st.header(common["using_shared_assumptions"])
-        st.caption(common["update_shared_assumptions"])
+    with render_input_section(common["using_shared_assumptions"], caption=common["update_shared_assumptions"]):
+        pass
 
     annual_spending = float(st.session_state.annual_retirement_spending)
     taxable = float(st.session_state.taxable_balance)

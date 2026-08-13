@@ -52,7 +52,7 @@ def inject_css() -> None:
         }}
         .mesh-hero p {{
             margin: 0;
-            color: rgba(250,250,250,0.82);
+            color: var(--text-color);
         }}
         .mesh-note {{
             border-left: 4px solid {ACCENT};
@@ -62,7 +62,7 @@ def inject_css() -> None:
             margin: 0.75rem 0 1rem 0;
         }}
         .mesh-small {{
-            color: rgba(250,250,250,0.70);
+            color: var(--text-color);
             font-size: 0.92rem;
         }}
         .mesh-link-button {{

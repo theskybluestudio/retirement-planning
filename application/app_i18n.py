@@ -44,7 +44,7 @@ CATALOG: dict[str, Any] = {
         }
     },
     "suite": {
-        "title": {"en": "Retirement Planning Calculators", "zh": "退休规划计算器"},
+        "title": {"en": "Retirement Planning, Demystified", "zh": "退休规划，化繁为简"},
         "home_subtitle": {
             "en": "A retirement planning calculator suite for Roth conversions, Social Security claiming, IRMAA, withdrawal strategy, sequence risk, and retirement readiness.",
             "zh": "一个退休规划计算器套件，涵盖 Roth 转换、社保领取、IRMAA、提款策略、收益顺序风险和退休准备度。",
